@@ -255,45 +255,45 @@ export interface UseCase {
 
 export const useCases: UseCase[] = [
   {
-    image: './abeewaybg.jpeg',
-    title: 'Indoor/Outdoor Location Tracking',
-    body: 'Go beyond GPS with our power-efficient tracking devices, anywhere, indoors and outdoors.',
+    image: './smart_cities.jpeg',
+    title: 'Smart Cities',
+    body: 'Using IoT technologies with a variety of Smart devices to visualize and analyze comprehensive real-time data, cities can respond dynamically by optimizing asset utilization and allocation of city resources.',
     tag: 'Users',
     tagColor: 'teal.400'
   },
   {
-    image: './actilitybg.jpeg',
-    title: 'IoT Roaming Partner',
-    body: 'Actility has a strong background in large-scale projectdelivery and a heritage in carrier-grade systems.',
+    image: './iot_roaming.jpeg',
+    title: 'IoT Roaming',
+    body: 'IoT roaming occurs when a connected device or sensor connects to a network other than its home network, either temporarily or permanently, in cases of permanent roaming.',
     tag: 'Roaming',
     tagColor: 'purple.400'
   },
   {
-    image: './agulusbg.jpeg',
-    title: 'Smarter Agricolture',
-    body: 'Pushing the boundaries of agtech by automating irrigation for farms across the eastern United States.',
+    image: './smart_agricolture.jpg',
+    title: 'Smart Agricolture',
+    body: 'The concept of using LoRaWAN based IoT solutions for smart agriculture practices is taking flight as farmers now can easily visualize, analyze and make more informed decisions regarding their crops.',
     tag: 'Users',
     tagColor: 'teal.400'
   },
   {
-    image: './aiotbg.jpeg',
+    image: './smart_gateways.jpeg',
     title: 'Smart Gateways',
-    body: 'Gateways defying obsolenscence trough the most current network protocols - the first with embedded environmental sensors.',
+    body: 'An intelligent hub that can simultaneously control devices from safety management to energy management with consumption monitoring and load control and lighting controls',
     tag: 'Hotspots',
-    tagColor: 'blue.400'
+    tagColor: 'yellow.400'
   },
   {
-    image: './awairbg.jpeg',
+    image: './logistics_management.jpeg',
     title: 'Air Quality Monitoring',
-    body: 'Our mission is to improve people’s lives, one breath at a time.',
+    body: 'Thanks to LoRaWAN based IoT solutions, supply chain and logistics companies successfully track high-value assets, including those in transit.',
     tag: 'Users',
     tagColor: 'teal.400'
   },
   {
-    image: './datacakebg.jpeg',
+    image: './smart_healthcare.jpeg',
     title: 'Enterprise IoT Platforms',
-    body: 'Create IoT applications in minutes on the Datacake low code platform without programming.',
-    tag: 'Integrations',
-    tagColor: 'yellow.400'
+    body: 'Low power, low cost, and consistent performance make LoRaWAN networks ideal for essential intelligent healthcare applications. LoRaWAN based IoT solutions can continuously monitor high-risk patients or systems.',
+    tag: 'Users',
+    tagColor: 'teal.400'
   },
 ];

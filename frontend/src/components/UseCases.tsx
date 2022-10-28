@@ -14,14 +14,14 @@ function UseCases() {
 
 function UseCaseCard({ image, title, body, tag, tagColor }: UseCase) {
   return (
-    <VStack justifySelf="center" borderRadius="lg" bg="gray.900" maxW="sm" h="md" boxShadow="dark-lg">
-      <Image borderTopLeftRadius="lg" borderTopRightRadius="lg" h="200px" w="full" src={image} />
+    <VStack justifySelf="center" borderRadius="lg" bg="gray.900" maxW="sm" h="lg" boxShadow="dark-lg">
+      <Image borderTopLeftRadius="lg" borderTopRightRadius="lg" fit="cover" h="200px" w="full" src={image} />
       <Box px={5}>
         <HStack py={6} w="full" justify="end">
           <Tag size="lg" bg="gray.600" color={tagColor}>{tag}</Tag>
         </HStack>
         <Heading size="md">{title}</Heading>
-        <Text>{body}</Text>
+        <Text mt={1}>{body}</Text>
       </Box>
     </VStack>
   );
