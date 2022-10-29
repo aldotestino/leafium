@@ -1,6 +1,7 @@
 import { Heading, HStack, VStack, Box, Text, Button, Image, useMediaQuery } from '@chakra-ui/react';
 import { Map, RadioReceiver } from 'lucide-react';
 import Navbar from './Navbar';
+import NextLink from 'next/link';
 
 function Main() {
 
@@ -20,7 +21,9 @@ function Main() {
             </Heading>
           </Box>
           <HStack gap={4}>
-            <Button rounded="full" colorScheme="purple" leftIcon={<Map />}>View map</Button>
+            <NextLink href="/device_map" passHref>
+              <Button rounded="full" colorScheme="purple" leftIcon={<Map />}>View map</Button>
+            </NextLink>
             <Button rounded="full" colorScheme="purple" variant="outline" leftIcon={<RadioReceiver />}>Register device</Button>
           </HStack>
         </VStack>
