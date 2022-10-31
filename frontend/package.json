@@ -9,14 +9,25 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@chakra-ui/icons": "^2.0.11",
     "@chakra-ui/react": "^2.3.6",
     "@emotion/react": "^11",
     "@emotion/styled": "^11",
+    "@tanstack/react-query": "^4.13.4",
+    "@trpc/client": "^9.27.2",
+    "@trpc/next": "^9.27.2",
+    "@trpc/react": "^9.27.2",
+    "@trpc/server": "^9.27.2",
+    "formik": "^2.2.9",
     "framer-motion": "^6",
     "lucide-react": "^0.93.0",
+    "mapbox-gl": "^2.10.0",
     "next": "12.3.1",
     "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react-dom": "18.2.0",
+    "react-map-gl": "^7.0.19",
+    "react-query": "3",
+    "zod": "^3.19.1"
   },
   "devDependencies": {
     "@types/node": "18.11.3",
