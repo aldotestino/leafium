@@ -4,6 +4,7 @@ import '../styles/globals.css';
 import '../../node_modules/mapbox-gl/dist/mapbox-gl.css';
 import { withTRPC } from '@trpc/next';
 import { ServerRouter } from '../server/router';
+import { MoralisProvider } from 'react-moralis';
 
 const config = {
   initialColorMode: 'dark',
@@ -15,7 +16,9 @@ const theme = extendTheme({ config });
 function App({ Component, pageProps }: AppProps) {
   return (
     <ChakraProvider theme={theme} resetCSS>
-      <Component {...pageProps} />
+      <MoralisProvider initializeOnMount={false}>
+        <Component {...pageProps} />
+      </MoralisProvider>
     </ChakraProvider>
   );
 }

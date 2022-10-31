@@ -22,10 +22,12 @@
     "framer-motion": "^6",
     "lucide-react": "^0.93.0",
     "mapbox-gl": "^2.10.0",
+    "moralis-v1": "^1.11.0",
     "next": "12.3.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-map-gl": "^7.0.19",
+    "react-moralis": "^1.4.2",
     "react-query": "3",
     "zod": "^3.19.1"
   },
