@@ -284,14 +284,14 @@ export const useCases: UseCase[] = [
   },
   {
     image: './logistics_management.jpeg',
-    title: 'Air Quality Monitoring',
+    title: 'Logistics Management',
     body: 'Thanks to LoRaWAN based IoT solutions, supply chain and logistics companies successfully track high-value assets, including those in transit.',
     tag: 'Users',
     tagColor: 'teal.400'
   },
   {
     image: './smart_healthcare.jpeg',
-    title: 'Enterprise IoT Platforms',
+    title: 'Smart Healthcare',
     body: 'Low power, low cost, and consistent performance make LoRaWAN networks ideal for essential intelligent healthcare applications. LoRaWAN based IoT solutions can continuously monitor high-risk patients or systems.',
     tag: 'Users',
     tagColor: 'teal.400'
