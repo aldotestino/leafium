@@ -1,5 +1,5 @@
 import { VStack, Heading, SimpleGrid, Image, Tag, Box, HStack, Text } from '@chakra-ui/react';
-import { UseCase, useCases } from '../utils/constants';
+import { UseCase, useCases } from '../utils/data';
 
 function UseCases() {
   return (

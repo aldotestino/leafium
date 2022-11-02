@@ -5,27 +5,18 @@ import { FormEvent, useEffect, useState, useRef, RefObject } from 'react';
 import Map, { MapRef, Marker } from 'react-map-gl';
 import NextLink from 'next/link';
 import { trpc } from '../common/client/trpc';
-import { markers } from '../utils/constants';
+import { markers } from '../utils/data';
+import MapNavbar from '../components/MapNavbar';
+import { DEFAULT_ZOOM, normalizeMarkerDim } from '../utils';
 
 interface Position {
   lat: number
   long: number
 }
 
-const MIN_ZOOM = 0.78;
-const MAX_ZOOM = 22;
-const MIN_MARKER_DIM = 20;
-const MAX_MARKER_DIM = 200;
-
-const DEFAULT_ZOOM = 10;
 
 function DeviceMap() {
-
-  function normalizeMarkerDim(zoom: number) {
-    return (zoom-MIN_ZOOM)/(MAX_ZOOM-MIN_ZOOM)*(MAX_MARKER_DIM-MIN_MARKER_DIM)+MIN_MARKER_DIM;
-  }
   
-  const [isLg] = useMediaQuery('(min-width: 62em)');
   const [pos, setPos] = useState<Position | null>(null);
   const [searchLocation, setSearchLocation] = useState('');
   const mapRef = useRef<MapRef>() as RefObject<MapRef>;
@@ -62,28 +53,12 @@ function DeviceMap() {
     <>
       {pos ? 
         <>
-          <HStack align="center" p={10} pos="fixed" top={0} w="full" zIndex={10} justify="space-between">
-            <NextLink href="/" passHref>
-              <Leaf cursor="pointer" size={36} strokeWidth={3} />
-            </NextLink>
-            <HStack align="center" gap={10}>
-              {isLg && <Link>Register your Device</Link>}
-              <form onSubmit={onSubmit}>
-                <InputGroup w="xs">
-                  <InputLeftElement>
-                    {isLoading ? <Spinner size="sm" /> :<Search2Icon w={4} h={4} />}
-                  </InputLeftElement>
-                  <Input 
-                    value={searchLocation} 
-                    onChange={e => setSearchLocation(e.target.value)} 
-                    rounded="full" 
-                    variant="filled" 
-                    focusBorderColor='purple.400' 
-                    placeholder='Search location' />
-                </InputGroup>
-              </form>
-            </HStack>   
-          </HStack>
+          <MapNavbar 
+            isLoading={isLoading} 
+            searchLocation={searchLocation} 
+            setSearchLocation={setSearchLocation} 
+            onSubmit={onSubmit} 
+          />
           <Map
             ref={mapRef}
             initialViewState={{
