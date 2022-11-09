@@ -5,7 +5,6 @@ import { useRouter } from 'next/router';
 import { Image, Heading, HStack, VStack } from '@chakra-ui/react';
 import { addressShortener } from '../utils';
 
-
 function User() {
 
   const { isWeb3EnableLoading, isWeb3Enabled, account } = useMoralis();

@@ -1,9 +1,6 @@
-import { HStack, Input, Link, InputGroup, InputLeftElement, Spinner, Center, useMediaQuery, Box } from '@chakra-ui/react';
-import { Leaf } from 'lucide-react';
-import { Search2Icon } from '@chakra-ui/icons';
+import {  Spinner, Center, Box } from '@chakra-ui/react';
 import { FormEvent, useEffect, useState, useRef, RefObject } from 'react';
 import Map, { MapRef, Marker } from 'react-map-gl';
-import NextLink from 'next/link';
 import { trpc } from '../common/client/trpc';
 import { markers } from '../utils/data';
 import MapNavbar from '../components/MapNavbar';
@@ -13,7 +10,6 @@ interface Position {
   lat: number
   long: number
 }
-
 
 function DeviceMap() {
   
