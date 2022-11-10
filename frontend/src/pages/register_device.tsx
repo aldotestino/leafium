@@ -1,11 +1,19 @@
 import { AddIcon } from '@chakra-ui/icons';
 import { Box, Image, Center, HStack, Heading, VStack, Button } from '@chakra-ui/react';
-import { Form, Formik, useFormikContext } from 'formik';
+import { Form, Formik, FormikProps } from 'formik';
 import { Leaf } from 'lucide-react';
 import NextLink from 'next/link';
-import { useEffect } from 'react';
-import InputFieeld from '../components/InputField';
+import { Ref, useEffect, useRef } from 'react';
+import InputField from '../components/InputField';
 import { generateRandomName } from '../utils';
+
+type Values = {
+  deviceId: string;
+  deviceName: string;
+  lat: string;
+  long: string;
+  altitude: number;
+}
 
 const initialValues = {
   deviceId: '',
@@ -17,25 +25,12 @@ const initialValues = {
 
 function RegisterDevice() {
 
-  //const { setFieldValue } = useFormikContext();
-
-  // const formik = useFormik({
-  //   initialValues: {
-  //     deviceId: '',
-  //     deviceName: generateRandomName(),
-  //     lat: '',
-  //     long: '',
-  //     altitude: 0
-  //   },
-  //   onSubmit: values => {
-  //     console.log(values);
-  //   },
-  // });
+  const formRef = useRef<FormikProps<Values>>();
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(({ coords }) => {
-      // setFieldValue('lat', coords.latitude.toString());
-      // setFieldValue('long', coords.longitude.toString());
+      formRef.current?.setFieldValue('lat', coords.latitude.toString());
+      formRef.current?.setFieldValue('long', coords.longitude.toString());
     });
   }, []);
 
@@ -60,6 +55,7 @@ function RegisterDevice() {
           <VStack gap={10}>
             <Heading color="gray.800">Register your device</Heading>
             <Formik
+              innerRef={formRef as Ref<FormikProps<Values>>}
               initialValues={initialValues}
               validateOnBlur={false}
               //validationSchema={LoginSchema}
