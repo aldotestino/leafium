@@ -31,12 +31,12 @@ function Navbar() {
       {(!isWeb3Enabled || !account) ? 
         <Button onClick={async () => {
           await enableWeb3();
-        }} rounded="full" leftIcon={<Wallet />} colorScheme="purple">
+        }} leftIcon={<Wallet />} colorScheme="purple">
           Connect wallet
         </Button> 
         : 
         <NextLink href="/user" passHref>
-          <Button rounded="full" leftIcon={<User />} colorScheme="purple">
+          <Button leftIcon={<User />} colorScheme="purple">
           Welcome {addressShortener(account)}
           </Button>
         </NextLink>

@@ -22,9 +22,11 @@ function Main() {
           </Box>
           <HStack gap={4}>
             <NextLink href="/device_map" passHref>
-              <Button rounded="full" colorScheme="purple" leftIcon={<Map />}>View map</Button>
+              <Button colorScheme="purple" leftIcon={<Map />}>View map</Button>
             </NextLink>
-            <Button rounded="full" colorScheme="purple" variant="outline" leftIcon={<RadioReceiver />}>Register device</Button>
+            <NextLink href="/register_device" passHref>
+              <Button colorScheme="purple" variant="outline" leftIcon={<RadioReceiver />}>Register device</Button>
+            </NextLink>
           </HStack>
         </VStack>
         {isLg && <Image zIndex={-2} src='./illustration.svg' />}

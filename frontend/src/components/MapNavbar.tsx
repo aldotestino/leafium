@@ -30,7 +30,6 @@ function MapNavbar({ isLoading, searchLocation, setSearchLocation, onSubmit }: M
             <Input 
               value={searchLocation} 
               onChange={e => setSearchLocation(e.target.value)} 
-              rounded="full" 
               variant="filled" 
               focusBorderColor='purple.400' 
               placeholder='Search location' />
