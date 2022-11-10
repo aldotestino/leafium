@@ -21,14 +21,17 @@ describe('Leafium unit test', () => {
   it('Allows to add a gateway', async () => {
     const tx = await leafium.addGateway('eui-8989898989', 'lucky lizard', '41.16092034214199', '16.4141807908589', 20);
     await tx.wait(1);
+    const tx1 = await leafium.addGateway('eui-89898989891', 'lucky lizard1', '41.16092034214199', '16.4141807908589', 20);
+    await tx1.wait(1);
     const myGateways = await leafium.getMyGateways();
-    const gateway = await leafium.gateways(0);
+    //const gateway = await leafium.gateways(1);
+    const gateway = await leafium.getGateways();
     console.log('getMyGatways output:');
     console.log(myGateways);
     console.log('-----------------------------------');
     console.log('gatways output:');
     console.log(gateway);
 
-    assert.deepEqual(myGateways[0], gateway);
+    assert.deepEqual(myGateways, gateway);
   });
 });

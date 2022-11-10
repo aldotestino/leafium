@@ -13,7 +13,7 @@ contract Leafium {
     }
 
     mapping(address => Gateway[]) private userToGateways;
-    Gateway[] public gateways;
+    Gateway[] private gateways;
 
     constructor() {}
 
@@ -37,5 +37,9 @@ contract Leafium {
 
     function getMyGateways() public view returns (Gateway[] memory) {
         return userToGateways[msg.sender];
+    }
+
+    function getGateways() public view returns (Gateway[] memory){
+        return gateways;
     }
 }
