@@ -11,7 +11,7 @@ import { toFormikValidationSchema } from 'zod-formik-adapter';
 import { trpc } from '../common/client/trpc';
 
 const gatewaySchema = z.object({
-  deviceId: z.string().length(20).regex(new RegExp('^eui-[a-zA-Z0-9]+$'), 'String must not contain special characrers'),
+  deviceId: z.string().length(20).startsWith('eui-').regex(new RegExp('[a-zA-Z0-9]+$'), 'String must not contain special characrers'),
   deviceName: z.string(),
   lat: z.string().regex(new RegExp('^-?([0-8]?[0-9]|90)(\\.[0-9]{1,10})?$')),
   long: z.string().regex(new RegExp('^-?([0-9]{1,2}|1[0-7][0-9]|180)(\\.[0-9]{1,10})?$')),
