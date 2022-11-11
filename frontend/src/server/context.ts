@@ -1,7 +1,6 @@
 import * as trpc from '@trpc/server';
 import * as trpcNext from '@trpc/server/adapters/next';
-
-//import { prisma } from '../common/prisma';
+import prisma from '../common/prisma';
 
 export async function createContext(ctx: trpcNext.CreateNextContextOptions) {
   const { req, res } = ctx;
@@ -9,7 +8,7 @@ export async function createContext(ctx: trpcNext.CreateNextContextOptions) {
   return {
     req,
     res,
-    //prisma
+    prisma
   };
 }
 
