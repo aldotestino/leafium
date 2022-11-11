@@ -1,5 +1,5 @@
 import { AddIcon } from '@chakra-ui/icons';
-import { Box, Image, Center, HStack, Heading, VStack, Button } from '@chakra-ui/react';
+import { Box, Image, Center, HStack, Heading, VStack, Button, useMediaQuery } from '@chakra-ui/react';
 import { Form, Formik, FormikProps } from 'formik';
 import { Leaf } from 'lucide-react';
 import NextLink from 'next/link';
@@ -25,6 +25,7 @@ const initialValues = {
 
 function RegisterDevice() {
 
+  const [isLg] = useMediaQuery('(min-width: 62em)');
   const formRef = useRef<FormikProps<Values>>();
 
   useEffect(() => {
@@ -39,79 +40,77 @@ function RegisterDevice() {
   }
 
   return (
-    <HStack h="100vh">
-      <Box h="full" flex={1}>
+    <HStack minH="100vh" align="start">
+      {isLg && <Box flex={1}  minH="100vh">
         <HStack p={10}>
           <NextLink href="/" passHref>
             <Leaf cursor="pointer" size={36} strokeWidth={3} />
           </NextLink>
         </HStack>
         <Center>
-          <Image zIndex={-2} src='./illustration2.svg' />
+          <Image src='./illustration2.svg' />
         </Center>
-      </Box>
-      <Box h="full" flex={1} bg="gray.100">
-        <Center h="full">
-          <VStack gap={10}>
-            <Heading color="gray.800">Register your device</Heading>
-            <Formik
-              innerRef={formRef as Ref<FormikProps<Values>>}
-              initialValues={initialValues}
-              validateOnBlur={false}
-              //validationSchema={LoginSchema}
-              onSubmit={onSubmit}
-            >
-              {({ errors, touched }) =>
-                <Form>
-                  <VStack w="sm" gap={4} p={10} background="white" borderRadius="lg" boxShadow="lg">
-                    <InputField
-                      name="deviceId"
-                      errorMessage={errors.deviceId}
-                      label="Device ID"
-                      placeholder="eui-1838193812938"
-                      type="text"
-                      isInvalid={Boolean(errors.deviceId && touched.deviceId)}
-                    />
-                    <InputField
-                      name="deviceName"
-                      isDisabled={true}
-                      errorMessage={errors.deviceName}
-                      label="Device Name"
-                      type="text"
-                      isInvalid={Boolean(errors.deviceName && touched.deviceName)}
-                    />
-                    <InputField
-                      name="lat"
-                      errorMessage={errors.lat}
-                      label="Latitude"
-                      type="text"
-                      isInvalid={Boolean(errors.lat && touched.lat)}
-                    />
-                    <InputField
-                      name="long"
-                      errorMessage={errors.long}
-                      label="Longitude"
-                      type="text"
-                      isInvalid={Boolean(errors.long && touched.long)}
-                    />
-                    <InputField
-                      name="altitude"
-                      errorMessage={errors.altitude}
-                      label="Altitude"
-                      type="number"
-                      min={0}
-                      isInvalid={Boolean(errors.altitude && touched.altitude)}
-                    />
-                    <Button leftIcon={<AddIcon />} alignSelf="end" type="submit" colorScheme="purple">
+      </Box>}
+      <Center py={10} minH="100vh" bg="gray.100" flex={1}>
+        <VStack gap={10}>
+          <Heading color="gray.800">Register your device</Heading>
+          <Formik
+            innerRef={formRef as Ref<FormikProps<Values>>}
+            initialValues={initialValues}
+            validateOnBlur={false}
+            //validationSchema={AddGatewaySchema}
+            onSubmit={onSubmit}
+          >
+            {({ errors, touched }) =>
+              <Form>
+                <VStack w="sm" gap={4} p={10} background="white" borderRadius="lg" boxShadow="lg">
+                  <InputField
+                    name="deviceId"
+                    errorMessage={errors.deviceId}
+                    label="Device ID"
+                    placeholder="eui-1838193812938"
+                    type="text"
+                    isInvalid={Boolean(errors.deviceId && touched.deviceId)}
+                  />
+                  <InputField
+                    name="deviceName"
+                    isDisabled={true}
+                    errorMessage={errors.deviceName}
+                    label="Device Name"
+                    type="text"
+                    isInvalid={Boolean(errors.deviceName && touched.deviceName)}
+                  />
+                  <InputField
+                    name="lat"
+                    errorMessage={errors.lat}
+                    label="Latitude"
+                    type="text"
+                    isInvalid={Boolean(errors.lat && touched.lat)}
+                  />
+                  <InputField
+                    name="long"
+                    errorMessage={errors.long}
+                    label="Longitude"
+                    type="text"
+                    isInvalid={Boolean(errors.long && touched.long)}
+                  />
+                  <InputField
+                    name="altitude"
+                    errorMessage={errors.altitude}
+                    label="Altitude"
+                    type="number"
+                    min={0}
+                    isInvalid={Boolean(errors.altitude && touched.altitude)}
+                  />
+                  <Button leftIcon={<AddIcon />} alignSelf="end" type="submit" colorScheme="purple">
                       Register
-                    </Button>
-                  </VStack>
-                </Form>
-              }
-            </Formik>
-          </VStack>
-        </Center>
-      </Box>
+                  </Button>
+                </VStack>
+              </Form>
+            }
+          </Formik>
+        </VStack>
+      </Center>
     </HStack>
   );
 }
