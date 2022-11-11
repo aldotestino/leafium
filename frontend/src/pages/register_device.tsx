@@ -1,5 +1,5 @@
 import { AddIcon } from '@chakra-ui/icons';
-import { Box, Image, Center, HStack, Heading, VStack, Button, useMediaQuery } from '@chakra-ui/react';
+import { Box, Image, Center, HStack, Heading, VStack, Button, useMediaQuery, useToast } from '@chakra-ui/react';
 import { Form, Formik, FormikProps } from 'formik';
 import { Leaf } from 'lucide-react';
 import NextLink from 'next/link';
@@ -8,17 +8,10 @@ import InputField from '../components/InputField';
 import { generateRandomName } from '../utils';
 import * as z from 'zod';
 import { toFormikValidationSchema } from 'zod-formik-adapter';
-
-const initialValues = {
-  deviceId: '',
-  deviceName: generateRandomName(),
-  lat: '',
-  long: '',
-  altitude: 0
-};
+import { trpc } from '../common/client/trpc';
 
 const gatewaySchema = z.object({
-  deviceId: z.string().length(20).startsWith('eui-'),
+  deviceId: z.string().length(20).regex(new RegExp('^eui-[a-zA-Z0-9]+$'), 'String must not contain special characrers'),
   deviceName: z.string(),
   lat: z.string().regex(new RegExp('^-?([0-8]?[0-9]|90)(\\.[0-9]{1,10})?$')),
   long: z.string().regex(new RegExp('^-?([0-9]{1,2}|1[0-7][0-9]|180)(\\.[0-9]{1,10})?$')),
@@ -27,10 +20,21 @@ const gatewaySchema = z.object({
 
 type GatewaySchema = z.infer<typeof gatewaySchema>;
 
+const initialValues: GatewaySchema = {
+  deviceId: '',
+  deviceName: generateRandomName(),
+  lat: '',
+  long: '',
+  altitude: 0
+};
+
 function RegisterDevice() {
 
   const [isLg] = useMediaQuery('(min-width: 62em)');
   const formRef = useRef<FormikProps<GatewaySchema>>();
+  const checkGateway = trpc.useMutation(['device.check']);
+
+  const toast = useToast();
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(({ coords }) => {
@@ -39,8 +43,20 @@ function RegisterDevice() {
     });
   }, []);
 
-  function onSubmit(values: any) {
-    console.log(values);
+  async function onSubmit(values: GatewaySchema) {
+    try {
+      await checkGateway.mutateAsync({ deviceId: values.deviceId });
+    }catch(e: any) {
+      console.log(e.message);
+      toast({
+        title: 'Gateway doesn\'t exist',
+        description: e.message,
+        duration: 5000,
+        isClosable: true,
+        status: 'error',
+        position: 'top-right'
+      });
+    }
   }
 
   return (
@@ -62,7 +78,7 @@ function RegisterDevice() {
             innerRef={formRef as Ref<FormikProps<GatewaySchema>>}
             initialValues={initialValues}
             validateOnBlur={false}
-            validationSchema={gatewaySchema}
+            validationSchema={toFormikValidationSchema(gatewaySchema)}
             onSubmit={onSubmit}
           >
             {({ errors, touched }) =>
