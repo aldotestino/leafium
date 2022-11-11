@@ -6,14 +6,8 @@ import NextLink from 'next/link';
 import { Ref, useEffect, useRef } from 'react';
 import InputField from '../components/InputField';
 import { generateRandomName } from '../utils';
-
-type Values = {
-  deviceId: string;
-  deviceName: string;
-  lat: string;
-  long: string;
-  altitude: number;
-}
+import * as z from 'zod';
+import { toFormikValidationSchema } from 'zod-formik-adapter';
 
 const initialValues = {
   deviceId: '',
@@ -23,10 +17,20 @@ const initialValues = {
   altitude: 0
 };
 
+const gatewaySchema = z.object({
+  deviceId: z.string().length(20).startsWith('eui-'),
+  deviceName: z.string(),
+  lat: z.string().regex(new RegExp('^-?([0-8]?[0-9]|90)(\\.[0-9]{1,10})?$')),
+  long: z.string().regex(new RegExp('^-?([0-9]{1,2}|1[0-7][0-9]|180)(\\.[0-9]{1,10})?$')),
+  altitude: z.number().min(0).max(5000)
+});
+
+type GatewaySchema = z.infer<typeof gatewaySchema>;
+
 function RegisterDevice() {
 
   const [isLg] = useMediaQuery('(min-width: 62em)');
-  const formRef = useRef<FormikProps<Values>>();
+  const formRef = useRef<FormikProps<GatewaySchema>>();
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(({ coords }) => {
@@ -55,10 +59,10 @@ function RegisterDevice() {
         <VStack gap={10}>
           <Heading color="gray.800">Register your device</Heading>
           <Formik
-            innerRef={formRef as Ref<FormikProps<Values>>}
+            innerRef={formRef as Ref<FormikProps<GatewaySchema>>}
             initialValues={initialValues}
             validateOnBlur={false}
-            //validationSchema={AddGatewaySchema}
+            validationSchema={gatewaySchema}
             onSubmit={onSubmit}
           >
             {({ errors, touched }) =>
