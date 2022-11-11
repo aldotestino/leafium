@@ -83,6 +83,7 @@ function RegisterDevice() {
                   <InputField
                     name="lat"
                     errorMessage={errors.lat}
+                    placeholder="Loading..."
                     label="Latitude"
                     type="text"
                     isInvalid={Boolean(errors.lat && touched.lat)}
@@ -90,6 +91,7 @@ function RegisterDevice() {
                   <InputField
                     name="long"
                     errorMessage={errors.long}
+                    placeholder="Loading..."
                     label="Longitude"
                     type="text"
                     isInvalid={Boolean(errors.long && touched.long)}
