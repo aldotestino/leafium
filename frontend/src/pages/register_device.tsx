@@ -11,8 +11,8 @@ import { toFormikValidationSchema } from 'zod-formik-adapter';
 import { trpc } from '../common/client/trpc';
 
 const gatewaySchema = z.object({
-  deviceId: z.string().length(20).startsWith('eui-').regex(new RegExp('[a-zA-Z0-9]+$'), 'String must not contain special characrers'),
-  deviceName: z.string(),
+  gatewayId: z.string().length(20).startsWith('eui-').regex(new RegExp('[a-zA-Z0-9]+$'), 'String must not contain special characrers'),
+  gatewayName: z.string(),
   lat: z.string().regex(new RegExp('^-?([0-8]?[0-9]|90)(\\.[0-9]{1,10})?$')),
   long: z.string().regex(new RegExp('^-?([0-9]{1,2}|1[0-7][0-9]|180)(\\.[0-9]{1,10})?$')),
   altitude: z.number().min(0).max(5000)
@@ -21,8 +21,8 @@ const gatewaySchema = z.object({
 type GatewaySchema = z.infer<typeof gatewaySchema>;
 
 const initialValues: GatewaySchema = {
-  deviceId: '',
-  deviceName: generateRandomName(),
+  gatewayId: '',
+  gatewayName: generateRandomName(),
   lat: '',
   long: '',
   altitude: 0
@@ -45,7 +45,7 @@ function RegisterDevice() {
 
   async function onSubmit(values: GatewaySchema) {
     try {
-      await checkGateway.mutateAsync({ deviceId: values.deviceId });
+      await checkGateway.mutateAsync({ gatewayId: values.gatewayId });
     }catch(e: any) {
       console.log(e.message);
       toast({
@@ -85,20 +85,20 @@ function RegisterDevice() {
               <Form>
                 <VStack w="sm" gap={4} p={10} background="white" borderRadius="lg" boxShadow="lg">
                   <InputField
-                    name="deviceId"
-                    errorMessage={errors.deviceId}
-                    label="Device ID"
+                    name="gatewayId"
+                    errorMessage={errors.gatewayId}
+                    label="Gateway ID"
                     placeholder="eui-1838193812938"
                     type="text"
-                    isInvalid={Boolean(errors.deviceId && touched.deviceId)}
+                    isInvalid={Boolean(errors.gatewayId && touched.gatewayId)}
                   />
                   <InputField
-                    name="deviceName"
+                    name="gatewayName"
                     isDisabled={true}
-                    errorMessage={errors.deviceName}
-                    label="Device Name"
+                    errorMessage={errors.gatewayName}
+                    label="Gateway Name"
                     type="text"
-                    isInvalid={Boolean(errors.deviceName && touched.deviceName)}
+                    isInvalid={Boolean(errors.gatewayName && touched.gatewayName)}
                   />
                   <InputField
                     name="lat"
@@ -125,7 +125,7 @@ function RegisterDevice() {
                     isInvalid={Boolean(errors.altitude && touched.altitude)}
                   />
                   <Button leftIcon={<AddIcon />} alignSelf="end" type="submit" colorScheme="purple">
-                      Register
+                    Register
                   </Button>
                 </VStack>
               </Form>

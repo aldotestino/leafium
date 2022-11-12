@@ -11,6 +11,6 @@ datasource db {
 }
 
 model Gateway {
-  id       String @id @default(auto()) @map("_id") @db.ObjectId
-  deviceId String @unique
+  id        String @id @default(auto()) @map("_id") @db.ObjectId
+  gatewayId String @unique
 }

@@ -5,22 +5,22 @@ import * as z from 'zod';
 export const deviceRouter = trpc.router<Context>()
   .mutation('check', {
     input: z.object({
-      deviceId: z.string()
+      gatewayId: z.string()
     }),
     resolve: async ({ input, ctx }) => {
       try {
-        const { deviceId } = input;
+        const { gatewayId } = input;
 
         const gateway = await ctx.prisma.gateway.findUnique({
           where: {
-            deviceId,
+            gatewayId,
           }
         });
 
         if (!gateway) {
           throw new trpc.TRPCError({
             code: 'BAD_REQUEST',
-            message: `Gateway with id "${deviceId}" doesn't exixst`,
+            message: `Gateway with id "${gatewayId}" doesn't exixst`,
           });
         }
 
