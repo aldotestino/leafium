@@ -21,7 +21,9 @@ function MapNavbar({ isLoading, searchLocation, setSearchLocation, onSubmit }: M
         <Leaf cursor="pointer" size={36} strokeWidth={3} />
       </NextLink>
       <HStack align="center" gap={10}>
-        {isLg && <Link>Register your Device</Link>}
+        {isLg && <NextLink href="/register_device" passHref>
+          <Link>Register your Device</Link>
+        </NextLink>}
         <form onSubmit={onSubmit}>
           <InputGroup w="xs">
             <InputLeftElement>

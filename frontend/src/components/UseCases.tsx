@@ -14,7 +14,7 @@ function UseCases() {
 
 function UseCaseCard({ image, title, body, tag, tagColor }: UseCase) {
   return (
-    <VStack justifySelf="center" borderRadius="lg" bg="gray.900" maxW="sm" h="lg" boxShadow="dark-lg">
+    <VStack justifySelf="center" borderRadius="lg" bg="gray.900" maxW="sm" h="lg" boxShadow="lg">
       <Image borderTopLeftRadius="lg" borderTopRightRadius="lg" fit="cover" h="200px" w="full" src={image} />
       <Box px={5}>
         <HStack py={6} w="full" justify="end">

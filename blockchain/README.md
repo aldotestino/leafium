@@ -6,7 +6,7 @@
     ```
 2. Deploy smart contract with:
     ```sh
-    yarn deploy:hardhat
+    yarn deploy:localhost
     ```
 3. Run unit test with:
     ```sh

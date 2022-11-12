@@ -1,5 +1,5 @@
 import { AddIcon } from '@chakra-ui/icons';
-import { Box, Image, Center, HStack, Heading, VStack, Button, useMediaQuery, useToast } from '@chakra-ui/react';
+import { Box, Image, Center, Heading, VStack, Button, useMediaQuery, useToast, Flex } from '@chakra-ui/react';
 import { Form, Formik, FormikProps } from 'formik';
 import { Leaf } from 'lucide-react';
 import NextLink from 'next/link';
@@ -60,18 +60,18 @@ function RegisterDevice() {
   }
 
   return (
-    <HStack minH="100vh" align="start">
+    <Flex align="start">
       {isLg && <Box flex={1}  minH="100vh">
-        <HStack p={10}>
+        <Box p={10}>
           <NextLink href="/" passHref>
             <Leaf cursor="pointer" size={36} strokeWidth={3} />
           </NextLink>
-        </HStack>
+        </Box>
         <Center>
           <Image src='./illustration2.svg' />
         </Center>
       </Box>}
-      <Center py={10} minH="100vh" bg="gray.100" flex={1}>
+      <Center m={0} py={10} minH="100vh" bg="gray.100" flex={1}>
         <VStack gap={10}>
           <Heading color="gray.800">Register your device</Heading>
           <Formik
@@ -133,7 +133,7 @@ function RegisterDevice() {
           </Formik>
         </VStack>
       </Center>
-    </HStack>
+    </Flex>
   );
 }
 
