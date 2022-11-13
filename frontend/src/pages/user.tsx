@@ -1,20 +1,33 @@
 import { useEffect } from 'react';
-import { useMoralis } from 'react-moralis';
+import { useMoralis, useWeb3Contract } from 'react-moralis';
 import Navbar from '../components/Navbar';
 import { useRouter } from 'next/router';
 import { Image, Heading, HStack, VStack } from '@chakra-ui/react';
 import { addressShortener } from '../utils';
+import { abi, contractAddresses } from '../common/constants';
 
 function User() {
 
-  const { isWeb3EnableLoading, isWeb3Enabled, account } = useMoralis();
+  const { chainId: chainIdHex, isWeb3EnableLoading, isWeb3Enabled, account } = useMoralis();
+  const chainId = parseInt(chainIdHex || '0x0').toString() as keyof typeof contractAddresses;
+
+  const leafiumContractAddress = chainId in contractAddresses ? contractAddresses[chainId][0] : null;
+
+  const { runContractFunction: getMyGateways } = useWeb3Contract({
+    abi,
+    contractAddress: leafiumContractAddress!,
+    functionName: 'getMyGateways'
+  });
+
   const router = useRouter();
 
   useEffect(() => {
     if(!isWeb3EnableLoading && !isWeb3Enabled) {
       router.push('/');
+    }else {
+      getMyGateways().then(r => console.log(r));
     }
-  }, [isWeb3EnableLoading, isWeb3Enabled]);
+  }, [isWeb3EnableLoading, isWeb3Enabled, account]);
 
   if(account) {
     return (
