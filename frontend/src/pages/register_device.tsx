@@ -1,17 +1,21 @@
 import { AddIcon } from '@chakra-ui/icons';
-import { Box, Image, Center, Heading, VStack, Button, useMediaQuery, useToast, Flex, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody } from '@chakra-ui/react';
+import { Box, Image, Center, Heading, VStack, Button, useMediaQuery, useToast, Flex, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, useDisclosure } from '@chakra-ui/react';
 import { Form, Formik, FormikProps } from 'formik';
 import { Leaf, Wallet } from 'lucide-react';
 import NextLink from 'next/link';
-import { Ref, useEffect, useRef } from 'react';
+import { Ref, useEffect, useRef, useState } from 'react';
 import InputField from '../components/InputField';
-import { generateRandomName } from '../utils';
+import { generateRandomName, isTx } from '../utils';
 import * as z from 'zod';
 import { toFormikValidationSchema } from 'zod-formik-adapter';
 import { trpc } from '../common/client/trpc';
 import { abi, contractAddresses } from '../common/constants';
 import { useMoralis, useWeb3Contract } from 'react-moralis';
 import { useRouter } from 'next/router';
+import ConfirmationModal from '../components/ConfirmationModal';
+import { useSteps } from 'chakra-ui-steps';
+import ConnectButton from '../components/ConnectButton';
+import CheckConnectionModal from '../components/CheckConnectionModal';
 
 const gatewaySchema = z.object({
   gatewayId: z.string().length(20).startsWith('eui-').regex(new RegExp('[a-zA-Z0-9]+$'), 'String must not contain special characrers'),
@@ -45,12 +49,20 @@ function RegisterDevice() {
   const chainId = parseInt(chainIdHex || '0x0').toString() as keyof typeof contractAddresses;
   const leafiumContractAddress = chainId in contractAddresses ? contractAddresses[chainId][0] : null;
 
-  const { runContractFunction: addGateway } = useWeb3Contract({
+  const { runContractFunction: addGateway, isLoading, isFetching } = useWeb3Contract({
     abi,
     contractAddress: leafiumContractAddress!,
     functionName: 'addGateway',
     params: {}
   });
+
+  const { nextStep, activeStep, reset } = useSteps({
+    initialStep: 0,
+  });
+
+  const [transactionHash, setTransactionHash] = useState('');
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(({ coords }) => {
@@ -62,7 +74,21 @@ function RegisterDevice() {
   async function onSubmit(values: GatewaySchema) {
     try {
       await checkGateway.mutateAsync({ gatewayId: values.gatewayId });
+      onOpen();
       await addGateway({
+        onError: () => {
+          onClose();
+          reset();
+        },
+        onSuccess: async (tx) => {
+          nextStep();
+          if(isTx(tx)) {
+            setTransactionHash(tx.hash);
+            await tx.wait(1);
+            await new Promise(res => setTimeout(res, 10000));
+            nextStep();
+          }
+        },
         params: {
           params: values
         }
@@ -153,8 +179,8 @@ function RegisterDevice() {
                         min={0}
                         isInvalid={Boolean(errors.altitude && touched.altitude)}
                       />
-                      <Button leftIcon={<AddIcon />} alignSelf="end" type="submit" colorScheme="purple">
-                    Register
+                      <Button isLoading={isLoading || isFetching} leftIcon={<AddIcon />} alignSelf="end" type="submit" colorScheme="purple">
+                        Register
                       </Button>
                     </VStack>
                   </Form>
@@ -165,30 +191,10 @@ function RegisterDevice() {
         </Box>
       </Flex>
 
-      <Modal isOpen={!isWeb3Enabled} onClose={() => null}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Non sei connesso a nessun wallet!</ModalHeader>
-          <ModalBody>
-            Per poter aggiungere il tuo Gateway e guadagnare LFM devi connettere il tuo wallet Metamask.
-          </ModalBody>
-
-          <ModalFooter>
-            <Button mr={3} variant="outline" colorScheme="red" onClick={() => router.push('/')}>Annulla</Button>
-            <Button leftIcon={<Wallet />} onClick={async () => {
-              await enableWeb3();
-            }} colorScheme="purple">
-              Connetti
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+      <ConfirmationModal activeStep={activeStep} resetSteps={reset} transactionHash={transactionHash} isOpen={isOpen} onClose={onClose} />
+      <CheckConnectionModal isOpen={!isWeb3Enabled} />
     </>
   );
 }
 
 export default RegisterDevice;
-
-function enableWeb3() {
-  throw new Error('Function not implemented.');
-}

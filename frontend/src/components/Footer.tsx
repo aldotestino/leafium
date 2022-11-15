@@ -9,9 +9,9 @@ function Footer() {
         <Heading size="xl">Leafium</Heading>
       </HStack>
       <HStack gap={[2, 2, 4, 8]}>
-        <Link>Privacy Policy</Link>
-        <Link>Hotspot Limited Warrantly</Link>
-        <Link>Terms and Conditions</Link>
+        <Link href='mailto:d.ceglie@studenti.poliba.it'>Domenico Costantino Ceglie</Link>
+        <Link href='mailto:a.testino@studenti.poliba.it'>Aldo Testino</Link>
+        <Link href='mailto:g.balducci5@studenti.poliba.it'>Giuseppe Mariano Balducci</Link>
       </HStack>
     </VStack>
   );

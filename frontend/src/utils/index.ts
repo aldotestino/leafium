@@ -396,9 +396,16 @@ function generateRandomName() {
   return `${adjs[Math.floor(Math.random() * adjs.length)]} ${animals[Math.floor(Math.random() * animals.length)]}`;
 }
 
+function isTx(obj: unknown): obj is { hash: string, wait: (blocks: number) => void } {
+  return (
+    typeof obj === 'object' && obj !== null && 'hash' in obj && 'wait' in obj
+  );
+}
+
 export {
   addressShortener,
   normalizeMarkerDim,
   generateRandomName,
+  isTx,
   DEFAULT_ZOOM
 };

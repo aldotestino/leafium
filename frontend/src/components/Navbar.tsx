@@ -5,6 +5,7 @@ import { useMoralis } from 'react-moralis';
 import { useRouter } from 'next/router';
 import NextLink from 'next/link';
 import { addressShortener } from '../utils';
+import ConnectButton from './ConnectButton';
 
 function Navbar() {
 
@@ -29,11 +30,7 @@ function Navbar() {
         </HStack>}
       </HStack>
       {(!isWeb3Enabled || !account) ? 
-        <Button onClick={async () => {
-          await enableWeb3();
-        }} leftIcon={<Wallet />} colorScheme="purple">
-          Connect wallet
-        </Button> 
+        <ConnectButton />
         : 
         <NextLink href="/user" passHref>
           <Button leftIcon={<User />} colorScheme="purple">

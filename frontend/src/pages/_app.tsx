@@ -5,17 +5,21 @@ import '../../node_modules/mapbox-gl/dist/mapbox-gl.css';
 import { withTRPC } from '@trpc/next';
 import { ServerRouter } from '../server/router';
 import { MoralisProvider } from 'react-moralis';
+import { StepsStyleConfig as Steps } from 'chakra-ui-steps';
 
-const config = {
-  initialColorMode: 'dark',
-  useSystemColorMode: false,
-};
-
-const theme = extendTheme({ config });
+const theme = extendTheme({
+  components: {
+    Steps,
+  },
+  config: {
+    initialColorMode: 'dark',
+    useSystemColorMode: false,
+  }
+});
 
 function App({ Component, pageProps }: AppProps) {
   return (
-    <ChakraProvider theme={theme} resetCSS>
+    <ChakraProvider theme={theme}>
       <MoralisProvider initializeOnMount={false}>
         <Component {...pageProps} />
       </MoralisProvider>
