@@ -4,7 +4,6 @@ pragma solidity ^0.8.9;
 import "./LeafiumToken.sol";
 
 contract Leafium is LeafiumToken{
-    // event GatewayAdded()
 
     struct Gateway {
         string id;
@@ -16,13 +15,8 @@ contract Leafium is LeafiumToken{
 
     mapping(address => Gateway[]) private userToGateways;
     Gateway[] private gateways;
-    // uint256 private totalToken = 1 * (10 ** 18);
-    // uint256 private reward = 50;
 
     constructor() public LeafiumToken() {
-        // _mint(msg.sender, totalToken);
-        // admin = msg.sender;
-
     }
 
     function addGateway(
@@ -41,7 +35,6 @@ contract Leafium is LeafiumToken{
         );
         gateways.push(newGateway);
         userToGateways[msg.sender].push(newGateway);
-        // super._transfer(admin, msg.sender, reward);
         LeafiumToken.transferToken(msg.sender);
 
     }
@@ -55,8 +48,7 @@ contract Leafium is LeafiumToken{
     }
 
     function getBalance(address account) public view returns (uint256){
-        require(msg.sender == account || msg.sender == LeafiumToken.admin, 'not authorized');
-        // return super.balanceOf(account);
+        require(msg.sender == account || msg.sender == LeafiumToken.owner, 'not authorized');
         return LeafiumToken.getBalanceToken(account);
     }
    
