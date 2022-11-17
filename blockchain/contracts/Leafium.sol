@@ -16,7 +16,7 @@ contract Leafium is LeafiumToken{
     mapping(address => Gateway[]) private userToGateways;
     Gateway[] private gateways;
 
-    constructor() public LeafiumToken() {
+    constructor() LeafiumToken() {
     }
 
     function addGateway(
@@ -47,9 +47,8 @@ contract Leafium is LeafiumToken{
         return gateways;
     }
 
-    function getBalance(address account) public view returns (uint256){
-        require(msg.sender == account || msg.sender == LeafiumToken.owner, 'not authorized');
-        return LeafiumToken.getBalanceToken(account);
+    function getBalance() public view returns (uint256){
+        return LeafiumToken.getBalanceToken();
     }
    
 }
