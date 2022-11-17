@@ -8,17 +8,20 @@ const deployContract: DeployFunction = async ({ getNamedAccounts, deployments })
   const { deploy, log } = deployments;
   const { deployer } = await getNamedAccounts();
 
-  log('🚀 Deploying Leafium🍃...');
-  const leafium = await deploy('Leafium', {
+  log('🚀 Deploying LeafiumToken🍃...');
+  const leafiumToken = await deploy('LeafiumToken', {
     from: deployer,
-    args: [],
+    args: [
+      process.env.TOTAL_TOKENS
+    ],
     log: true,
     waitConfirmations: helperNetworkConfig[network.name].blockConfirmations || 1
   });
-  log('✅ Leafium deployed!');
+  log('✅ LeafiumToken deployed!');
+
 
   if (!developmentChains.includes(network.name) && process.env.ETHERSCAN_API_KEY) {
-    await verify(leafium.address, [], 'contracts/Leafium.sol:Leafium');
+    await verify(leafiumToken.address, [process.env.TOTAL_TOKENS], 'contracts/LeafiumToken.sol:LeafiumToken');
   }
 };
 

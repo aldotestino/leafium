@@ -1,10 +1,9 @@
+// SPDX-License-Identifier: MIT
 pragma solidity ^0.8.9;
 
-//ERC Token Standard #20 Interface
 import "./LeafiumToken.sol";
 
-contract Leafium is LeafiumToken{
-
+contract Leafium {
     struct Gateway {
         string id;
         string name;
@@ -13,10 +12,14 @@ contract Leafium is LeafiumToken{
         uint256 altitude;
     }
 
+    LeafiumToken token;
+
     mapping(address => Gateway[]) private userToGateways;
     Gateway[] private gateways;
+    uint256 reward = 50 * (10**18);
 
-    constructor() LeafiumToken() {
+    constructor(address tokenAddress) {
+        token = LeafiumToken(tokenAddress);
     }
 
     function addGateway(
@@ -35,20 +38,18 @@ contract Leafium is LeafiumToken{
         );
         gateways.push(newGateway);
         userToGateways[msg.sender].push(newGateway);
-        LeafiumToken.transferToken(msg.sender);
-
+        token.transferToken(msg.sender, reward);
     }
 
     function getMyGateways() public view returns (Gateway[] memory) {
         return userToGateways[msg.sender];
     }
 
-    function getGateways() public view returns (Gateway[] memory){
+    function getGateways() public view returns (Gateway[] memory) {
         return gateways;
     }
 
-    function getBalance() public view returns (uint256){
-        return LeafiumToken.getBalanceToken();
+    function getBalance() public view returns (uint256) {
+        return token.getUserBalance(msg.sender);
     }
-   
 }
