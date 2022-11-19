@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.9;
 
-contract Leafium {
-    // event GatewayAdded()
+import "./LeafiumToken.sol";
 
+contract Leafium {
     struct Gateway {
         string id;
         string name;
@@ -12,10 +12,15 @@ contract Leafium {
         uint256 altitude;
     }
 
+    LeafiumToken token;
+
     mapping(address => Gateway[]) private userToGateways;
     Gateway[] private gateways;
+    uint256 reward = 50 * (10**18);
 
-    constructor() {}
+    constructor(address tokenAddress) {
+        token = LeafiumToken(tokenAddress);
+    }
 
     function addGateway(
         string memory gatewayId,
@@ -33,13 +38,18 @@ contract Leafium {
         );
         gateways.push(newGateway);
         userToGateways[msg.sender].push(newGateway);
+        token.rewardTo(msg.sender, reward);
     }
 
     function getMyGateways() public view returns (Gateway[] memory) {
         return userToGateways[msg.sender];
     }
 
-    function getGateways() public view returns (Gateway[] memory){
+    function getGateways() public view returns (Gateway[] memory) {
         return gateways;
+    }
+
+    function getBalance() public view returns (uint256) {
+        return token.balanceOf(msg.sender);
     }
 }

@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import { Image, Heading, HStack, VStack } from '@chakra-ui/react';
 import { addressShortener } from '../utils';
 import { abi, contractAddresses } from '../common/constants';
+import { BigNumber } from 'ethers';
 
 function User() {
 
@@ -19,6 +20,12 @@ function User() {
     functionName: 'getMyGateways'
   });
 
+  const { runContractFunction: getBalance } = useWeb3Contract({
+    abi,
+    contractAddress: leafiumContractAddress!,
+    functionName: 'getBalance'
+  });
+
   const router = useRouter();
 
   useEffect(() => {
@@ -26,6 +33,7 @@ function User() {
       router.push('/');
     }else {
       getMyGateways().then(r => console.log(r));
+      getBalance().then(b => console.log((b as BigNumber).toString()));
     }
   }, [isWeb3EnableLoading, isWeb3Enabled, account]);
 
