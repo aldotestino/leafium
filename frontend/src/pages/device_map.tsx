@@ -8,19 +8,13 @@ import { GetServerSideProps, } from 'next';
 import { abi, contractAddresses } from '../common/constants';
 import { AbiItem } from 'web3-utils';
 import Web3 from 'web3';
+import { GatewayPosition } from '../utils/types';
 
 interface Position {
   lat: number
   long: number
 }
 
-interface GatewayPosition {
-  id: string
-  name: string
-  lat: number
-  long: number
-  altitude: number
-}
 
 interface DeviceMapProps {
   gateways: GatewayPosition[]
