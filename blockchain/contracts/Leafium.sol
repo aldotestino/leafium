@@ -38,7 +38,7 @@ contract Leafium {
         );
         gateways.push(newGateway);
         userToGateways[msg.sender].push(newGateway);
-        token.transferToken(msg.sender, reward);
+        token.rewardTo(msg.sender, reward);
     }
 
     function getMyGateways() public view returns (Gateway[] memory) {
@@ -50,6 +50,6 @@ contract Leafium {
     }
 
     function getBalance() public view returns (uint256) {
-        return token.getUserBalance(msg.sender);
+        return token.balanceOf(msg.sender);
     }
 }

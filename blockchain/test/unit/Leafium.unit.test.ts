@@ -1,10 +1,11 @@
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import { assert, expect } from 'chai';
 import { deployments, ethers } from 'hardhat';
-import type { Leafium } from '../../typechain-types';
+import type { Leafium, LeafiumToken } from '../../typechain-types';
 
 describe('Leafium unit test', () => {
   let leafium: Leafium;
+  let leafiumToken: LeafiumToken;
   let deployer: SignerWithAddress;
   let user1: SignerWithAddress;
 
@@ -14,8 +15,11 @@ describe('Leafium unit test', () => {
     user1 = accounts[1];
 
     await deployments.fixture('all');
-    const { abi, address } = await deployments.get('Leafium');
-    leafium = (await ethers.getContractAt(abi, address)) as Leafium;
+    const { abi: abi1, address: address1 } = await deployments.get('Leafium');
+    leafium = (await ethers.getContractAt(abi1, address1)) as Leafium;
+
+    const { abi: abi2, address: address2 } = await deployments.get('LeafiumToken');
+    leafiumToken = (await ethers.getContractAt(abi2, address2)) as LeafiumToken;
   });
 
   it('Allows to add a gateway', async () => {
@@ -25,12 +29,6 @@ describe('Leafium unit test', () => {
     await tx1.wait(1);
     const myGateways = await leafium.getMyGateways();
     const gateways = await leafium.getGateways();
-    console.log('getMyGatways output:');
-    console.log(myGateways);
-    console.log('-----------------------------------');
-    console.log('gatways output:');
-    console.log(gateways);
-
     assert.deepEqual(myGateways, gateways);
   });
 
@@ -46,5 +44,27 @@ describe('Leafium unit test', () => {
 
     const gateways = await leafium.getGateways();
     expect(gateways).to.be.not.empty;
+  });
+
+  it('gives reward to the user that registered the gateway', async () => {
+    const tx = await leafium.addGateway('eui-8989898989', 'lucky lizard', '41.16092034214199', '16.4141807908589', 20);
+    await tx.wait(1);
+    const reward = ethers.utils.parseEther('50');
+    const userBalance = await leafium.getBalance();
+
+    assert.deepEqual(reward, userBalance);
+  });
+
+  it('removes tokens from the token after a registration', async () => {
+    const totalSupply = await leafiumToken.totalSupply();
+
+    const tx = await leafium.addGateway('eui-8989898989', 'lucky lizard', '41.16092034214199', '16.4141807908589', 20);
+    await tx.wait(1);
+
+    const userBalance = await leafium.getBalance();
+
+    const availableTokens = await leafiumToken.balanceOf(leafiumToken.address);
+
+    expect(userBalance.add(availableTokens)).to.be.deep.equal(totalSupply);
   });
 });
