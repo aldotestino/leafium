@@ -8,11 +8,9 @@ import { abi, contractAddresses } from '../common/constants';
 import { SimpleGrid, Box, Text } from '@chakra-ui/react';
 import { RadioReceiver } from 'lucide-react';
 import { MapPinIcon, CurrencyDollarIcon, ArrowTrendingUpIcon } from '@heroicons/react/24/outline';
-import { GetServerSideProps } from 'next';
 import { GatewayPosition } from '../utils/types';
-import { AbiItem } from 'web3-utils';
-import Web3 from 'web3';
 import { trpc } from '../common/client/trpc';
+import { BigNumber } from 'ethers';
 
 interface DeviceUserProps {
   gateways: GatewayPosition[]
@@ -36,6 +34,12 @@ function User() {
     abi,
     contractAddress: leafiumContractAddress!,
     functionName: 'getMyGateways'
+  });
+
+  const { runContractFunction: getBalance } = useWeb3Contract({
+    abi,
+    contractAddress: leafiumContractAddress!,
+    functionName: 'getBalance'
   });
 
   const router = useRouter();
@@ -67,6 +71,7 @@ function User() {
       router.push('/');
     } else {
       getMyGateways().then(r => console.log(r));
+      getBalance().then(b => console.log((b as BigNumber).toString()));
     }
   }, [isWeb3EnableLoading, isWeb3Enabled, account]);
 

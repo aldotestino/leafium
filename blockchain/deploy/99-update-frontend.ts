@@ -7,7 +7,7 @@ const FRONTEND_ADDRESSES_FILE = path.join(__dirname, '..', '..', 'frontend', 'sr
 const FRONTEND_ABI_FILE = path.join(__dirname, '..', '..', 'frontend', 'src', 'common', 'constants', 'abi.json');
 
 const updateFrontend = async () => {
-  if(process.env.UPDATE_FRONTEND) {
+  if (process.env.UPDATE_FRONTEND) {
     console.log('🚀 Updating frontend...');
     await updateContractAddresses();
     await updateAbi();
@@ -20,12 +20,12 @@ async function updateContractAddresses() {
 
   const chainId = network.config.chainId;
 
-  if(chainId) {
-    if(chainId.toString() in contractAddresses) {
-      if(!contractAddresses[chainId].includes(address)) {
-        contractAddresses.unshift(address);
+  if (chainId) {
+    if (chainId.toString() in contractAddresses) {
+      if (!contractAddresses[chainId].includes(address)) {
+        contractAddresses[chainId].unshift(address);
       }
-    }else {
+    } else {
       contractAddresses[chainId] = [address];
     }
   }
