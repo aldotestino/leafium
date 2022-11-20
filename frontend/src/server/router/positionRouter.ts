@@ -3,7 +3,7 @@ import { Context } from '../context';
 import * as z from 'zod';
 
 export const positionRouter = trpc.router<Context>()
-  .query('forward', {
+  .mutation('forward', {
     input: z.object({
       location: z.string()
     }),
@@ -40,35 +40,34 @@ export const positionRouter = trpc.router<Context>()
       }
     }
   })
-  .query('reverse', {
+  .mutation('reverse', {
     input: z.object({
-      locations: z.string().array()
+      coordinates: z.object({
+        lat: z.string().regex(new RegExp('^-?([0-8]?[0-9]|90)(\\.[0-9]{1,14})?$')),
+        long: z.string().regex(new RegExp('^-?([0-9]{1,2}|1[0-7][0-9]|180)(\\.[0-9]{1,15})?$')),
+      }).array()
     }),
     resolve: async ({ input }) => {
+      console.log(input);
       try {
-        const url = new URL('http://api.positionstack.com/v1/reverse');
-        url.searchParams.append('access_key', process.env.POSITIONSTACK_API_KEY!);
-        url.searchParams.append('query', input.locations[0] +','+input.locations[1]);
-        url.searchParams.append('limit', '1');
-        url.searchParams.append('output', 'json');
-        const res = await fetch(url);
-        // const data = await res.json();
-        const { data }: { data: { administrative_area: string, region: string, country : string }[] } = await res.json();
-        
+        const locations: string[] = [];
 
-        // if (data.length === 0) {
-        //   throw new trpc.TRPCError({
-        //     code: 'BAD_REQUEST',
-        //     message: `Location ${input} doesn't exist!`
-        //   });
-        // }
+        await Promise.all(input.coordinates.map(async ({ lat, long }) => {
+          const url = new URL('http://api.positionstack.com/v1/reverse');
+          url.searchParams.append('access_key', process.env.POSITIONSTACK_API_KEY!);
+          url.searchParams.append('query', `${lat}, ${long}`);
+          url.searchParams.append('limit', '1');
+          url.searchParams.append('output', 'json');
+          const res = await fetch(url);
+          const { data }: { data: { administrative_area: string, region: string, country: string }[] } = await res.json();
+
+          locations.push(`${data[0].administrative_area}, ${data[0].region}, ${data[0].country}`);
+        }));
 
         return {
           success: true,
           data: {
-            administrative_area: data[0].administrative_area,
-            region: data[0].region,
-            country: data[0].country,
+            locations
           },
         };
       } catch (err: any) {

@@ -15,14 +15,13 @@ interface Position {
   long: number
 }
 
-
 interface DeviceMapProps {
   gateways: GatewayPosition[]
 }
 
 function DeviceMap({ gateways }: DeviceMapProps ) {
   
-  const [pos, setPos] = useState<Position | null>(null);
+  const [initialPos, setInitialPos] = useState<Position | null>(null);
   const [searchLocation, setSearchLocation] = useState('');
   const mapRef = useRef<MapRef>() as RefObject<MapRef>;
   const [markerDim, setMarkerDim] = useState(normalizeMarkerDim(DEFAULT_ZOOM));
@@ -30,15 +29,13 @@ function DeviceMap({ gateways }: DeviceMapProps ) {
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   
-  const { refetch, isLoading } = trpc.useQuery(['position.forward', { location: searchLocation }], {
-    enabled: false
-  });
+  const forwardPosition = trpc.useMutation(['position.forward']);
 
   useEffect(() => {
     console.log(gateways);
     
     navigator.geolocation.getCurrentPosition(({ coords }) => {
-      setPos({
+      setInitialPos({
         lat: coords.latitude,
         long: coords.longitude
       });
@@ -48,18 +45,16 @@ function DeviceMap({ gateways }: DeviceMapProps ) {
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     try {
-      const { data } = await refetch();
-      setPos({
-        lat: data!.data.lat,
-        long: data!.data.long
+      const { data } = await forwardPosition.mutateAsync({
+        location: searchLocation
       });
-      mapRef.current?.flyTo({ center: [data!.data.long, data!.data.lat] });
+      mapRef.current?.flyTo({ center: [data.long, data.lat], zoom: 10 });
     } catch (err: any) {
       console.log(err);
     }
   }
 
-  if(!pos) {
+  if(!initialPos) {
     return  (
       <Center height="100vh">
         <Spinner size="lg" color="purple.200" />
@@ -70,7 +65,7 @@ function DeviceMap({ gateways }: DeviceMapProps ) {
   return (
     <>
       <MapNavbar 
-        isLoading={isLoading} 
+        isLoading={forwardPosition.isLoading} 
         searchLocation={searchLocation} 
         setSearchLocation={setSearchLocation} 
         onSubmit={onSubmit} 
@@ -91,8 +86,8 @@ function DeviceMap({ gateways }: DeviceMapProps ) {
       <Map
         ref={mapRef}
         initialViewState={{
-          longitude: pos?.long,
-          latitude: pos?.lat,
+          latitude: initialPos.lat,
+          longitude: initialPos.long,
           zoom: 10
         }}    
         style={{ width: '100vw', height: '100vh' }}
@@ -130,15 +125,14 @@ export const getServerSideProps: GetServerSideProps = async () => {
   let gateways: GatewayPosition[] = [];
 
   await leafiumContract.methods.getGateways().call(function (err: any, res: any) {
-    gateways = res.map((g: any) => {
-      return {
-        id: g.id,
-        name: g.name,
-        lat: parseFloat(g.lat),
-        long: parseFloat(g.long),
-        altitude: parseInt(g.altitude)
-      } as GatewayPosition;
-    });
+    gateways = res.map((g: any) => ({
+      id: g.id,
+      name: g.name,
+      lat: parseFloat(g.lat),
+      long: parseFloat(g.long),
+      altitude: parseInt(g.altitude),
+    } as GatewayPosition)
+    );
   });
 
   return {

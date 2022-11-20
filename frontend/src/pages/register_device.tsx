@@ -1,7 +1,7 @@
 import { AddIcon } from '@chakra-ui/icons';
-import { Box, Image, Center, Heading, VStack, Button, useMediaQuery, useToast, Flex, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, useDisclosure } from '@chakra-ui/react';
+import { Box, Image, Center, Heading, VStack, Button, useMediaQuery, useToast, Flex, useDisclosure } from '@chakra-ui/react';
 import { Form, Formik, FormikProps } from 'formik';
-import { Leaf, Wallet } from 'lucide-react';
+import { Leaf } from 'lucide-react';
 import NextLink from 'next/link';
 import { Ref, useEffect, useRef, useState } from 'react';
 import InputField from '../components/InputField';
@@ -11,10 +11,8 @@ import { toFormikValidationSchema } from 'zod-formik-adapter';
 import { trpc } from '../common/client/trpc';
 import { abi, contractAddresses } from '../common/constants';
 import { useMoralis, useWeb3Contract } from 'react-moralis';
-import { useRouter } from 'next/router';
 import ConfirmationModal from '../components/ConfirmationModal';
 import { useSteps } from 'chakra-ui-steps';
-import ConnectButton from '../components/ConnectButton';
 import CheckConnectionModal from '../components/CheckConnectionModal';
 
 const gatewaySchema = z.object({
@@ -43,9 +41,7 @@ function RegisterDevice() {
 
   const toast = useToast();
 
-  const router = useRouter();
-
-  const { chainId: chainIdHex, isWeb3Enabled, enableWeb3 } = useMoralis();
+  const { chainId: chainIdHex, isWeb3Enabled } = useMoralis();
   const chainId = parseInt(chainIdHex || '0x0').toString() as keyof typeof contractAddresses;
   const leafiumContractAddress = chainId in contractAddresses ? contractAddresses[chainId][0] : null;
 
