@@ -125,7 +125,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
   let gateways: GatewayPosition[] = [];
 
   await leafiumContract.methods.getGateways().call(function (err: any, res: any) {
-    gateways = res.map((g: any) => ({
+    gateways = res?.map((g: any) => ({
       id: g.id,
       name: g.name,
       lat: parseFloat(g.lat),
