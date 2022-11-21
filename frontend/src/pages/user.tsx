@@ -19,10 +19,11 @@ function User() {
   const chainId = parseInt(chainIdHex || '0x0').toString() as keyof typeof contractAddresses;
 
   const [gateways, setGateways] = useState<GatewayPosition[]>([]);
-  const [balance, setBalance] = useState<number>(-1);
+  const [balance, setBalance] = useState<string>('0');
   const [loading, setLoading] = useState(true);
 
   //console.log(gateways);
+  //console.log(balance.toString());
 
   const leafiumContractAddress = chainId in contractAddresses ? contractAddresses[chainId][0] : null;
 
@@ -63,9 +64,10 @@ function User() {
           setLoading(false);
         });
       });
-      getBalance().then(b =>
+      getBalance().then(b => {
         //console.log((b as BigNumber).toString())
-        setBalance(b as number));
+        setBalance((b as BigNumber).toString());
+      });
     }
   }, [isWeb3EnableLoading, isWeb3Enabled, account]);
 
@@ -78,7 +80,7 @@ function User() {
             <Image w={10} h={10} src={`https://avatars.dicebear.com/api/identicon/${account}.svg`} />
             <Heading size="lg">{addressShortener(account)}</Heading>
           </HStack>
-          {balance >= 0 && !loading && <Heading size="lg">Total Balance:  {balance / (10 ** 18)} <Text bgGradient="linear(to-r, purple.500 50%, blue.500)" bgClip="text" display="inline">LFM</Text></Heading>}
+          {balance && !loading && <Heading size="lg">Total Balance:  {balance.length > 1 ? balance.substring(0, balance.length - 18) : balance} <Text bgGradient="linear(to-r, purple.500 50%, blue.500)" bgClip="text" display="inline">LFM</Text></Heading>}
           </HStack>
           <Heading>Your devices</Heading>
 
