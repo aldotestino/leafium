@@ -29,6 +29,9 @@ jobs:
     - name: Install dependencies
       run: yarn --frozen-lockfile
       working-directory: ./blockchain
+    - name: Deploy contracts
+      run: yarn deploy:localhost --tags leafium
+      working-directory: ./blockchain
     - name: Run tests
       run: yarn test:unit
       working-directory: ./blockchain

@@ -3,8 +3,8 @@ import { deployments, ethers, network } from 'hardhat';
 import * as fs from 'fs';
 import path from 'path';
 
-const FRONTEND_ADDRESSES_FILE = path.join(__dirname, '..', '..', 'frontend', 'src', 'common', 'constants', 'contractAddresses.json');
-const FRONTEND_ABI_FILE = path.join(__dirname, '..', '..', 'frontend', 'src', 'common', 'constants', 'abi.json');
+const FRONTEND_ADDRESSES_FILE = path.join(__dirname, '..', '..', 'app', 'src', 'common', 'constants', 'contractAddresses.json');
+const FRONTEND_ABI_FILE = path.join(__dirname, '..', '..', 'app', 'src', 'common', 'constants', 'abi.json');
 
 const updateFrontend = async () => {
   if (process.env.UPDATE_FRONTEND) {

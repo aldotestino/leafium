@@ -27,5 +27,5 @@ const deployContract: DeployFunction = async ({ getNamedAccounts, deployments })
   }
 };
 
-deployContract.tags = ['all'];
+deployContract.tags = ['all', 'leafium'];
 export default deployContract;
