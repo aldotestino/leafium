@@ -29,6 +29,10 @@ jobs:
     - name: Install dependencies
       run: yarn --frozen-lockfile
       working-directory: ./blockchain
+    - name: create .env file
+      run: |
+            touch .env
+            echo 1000000000000000000000 >> .env
     - name: Deploy contracts
       run: yarn deploy:hardhat --tags leafium
       working-directory: ./blockchain
