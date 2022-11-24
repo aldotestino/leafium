@@ -1,7 +1,7 @@
 import { AddIcon } from '@chakra-ui/icons';
-import { Box, Image, Center, Heading, VStack, Button, useMediaQuery, useToast, Flex, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, useDisclosure } from '@chakra-ui/react';
+import { Box, Image, Center, Text, Heading, VStack, Button, useMediaQuery, useToast, Flex, useDisclosure, FormControl, FormLabel, Divider } from '@chakra-ui/react';
 import { Form, Formik, FormikProps } from 'formik';
-import { Leaf, Wallet } from 'lucide-react';
+import { Leaf } from 'lucide-react';
 import NextLink from 'next/link';
 import { Ref, useEffect, useRef, useState } from 'react';
 import InputField from '../components/InputField';
@@ -11,16 +11,18 @@ import { toFormikValidationSchema } from 'zod-formik-adapter';
 import { trpc } from '../common/client/trpc';
 import { abi, contractAddresses } from '../common/constants';
 import { useMoralis, useWeb3Contract } from 'react-moralis';
-import { useRouter } from 'next/router';
 import ConfirmationModal from '../components/ConfirmationModal';
 import { useSteps } from 'chakra-ui-steps';
-import ConnectButton from '../components/ConnectButton';
 import CheckConnectionModal from '../components/CheckConnectionModal';
+import { SearchOption } from '../utils/types';
+import SearchLocation from '../components/SearchLocation';
+import { router } from '@trpc/server';
+import { useRouter } from 'next/router';
 
 const gatewaySchema = z.object({
   gatewayId: z.string().length(20).startsWith('eui-').regex(new RegExp('[a-zA-Z0-9]+$'), 'String must not contain special characrers'),
   gatewayName: z.string(),
-  lat: z.string().regex(new RegExp('^-?([0-8]?[0-9]|90)(\\.[0-9]{1,14})?$')),
+  lat: z.string().regex(new RegExp('^-?([0-8]?[0-9]|90)(\\.[0-9]{1,15})?$')),
   long: z.string().regex(new RegExp('^-?([0-9]{1,2}|1[0-7][0-9]|180)(\\.[0-9]{1,15})?$')),
   altitude: z.number().min(0).max(5000)
 });
@@ -45,7 +47,7 @@ function RegisterDevice() {
 
   const router = useRouter();
 
-  const { chainId: chainIdHex, isWeb3Enabled, enableWeb3 } = useMoralis();
+  const { chainId: chainIdHex, isWeb3Enabled } = useMoralis();
   const chainId = parseInt(chainIdHex || '0x0').toString() as keyof typeof contractAddresses;
   const leafiumContractAddress = chainId in contractAddresses ? contractAddresses[chainId][0] : null;
 
@@ -64,12 +66,22 @@ function RegisterDevice() {
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
+  function onHandleClose() {
+    onClose();
+    router.push('/device_map');
+  }
+
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(({ coords }) => {
       formRef.current?.setFieldValue('lat', coords.latitude.toString());
       formRef.current?.setFieldValue('long', coords.longitude.toString());
     });
   }, []);
+
+  function setLocationFromSearch({ lat, long }: SearchOption) {
+    formRef.current?.setFieldValue('lat', lat.toString());
+    formRef.current?.setFieldValue('long', long.toString());
+  }
 
   async function onSubmit(values: GatewaySchema) {
     try {
@@ -87,13 +99,13 @@ function RegisterDevice() {
             await tx.wait(1);
             await new Promise(res => setTimeout(res, 10000));
             nextStep();
+            console.log('gateway aggiunto');
           }
         },
         params: {
           params: values
         }
       });
-      console.log('gateway aggiunto');
     }catch(e: any) {
       console.log(e.message);
       toast({
@@ -110,7 +122,8 @@ function RegisterDevice() {
   return (
     <>
       <Flex align="start">
-        {isLg && <Box flex={1}  minH="100vh">
+        {isLg && 
+        <Box flex={1}>
           <Box p={10}>
             <NextLink href="/" passHref>
               <Leaf cursor="pointer" size={36} strokeWidth={3} />
@@ -120,14 +133,15 @@ function RegisterDevice() {
             <Image src='./illustration2.svg' />
           </Center>
         </Box>}
-        <Box minH="100vh" bg="gray.100" flex={1}>
-          {!isLg && <Box p={10}>
+        <Box bg="gray.100" flex={1}>
+          {!isLg && 
+          <Box p={10}>
             <NextLink href="/" passHref>
               <Leaf cursor="pointer" color='#1A202C' size={36} strokeWidth={3} />
             </NextLink>
           </Box>}
-          <Center h={isLg ? '100vh' : 'full'} m={0} pt={!isLg ? 0 : 10} pb={10}>
-            <VStack gap={10}>
+          <Center m={0} pt={!isLg ? 0 : 10} pb={10}>
+            <VStack gap={4}>
               <Heading color="gray.800">Register your device</Heading>
               <Formik
                 innerRef={formRef as Ref<FormikProps<GatewaySchema>>}
@@ -138,7 +152,7 @@ function RegisterDevice() {
               >
                 {({ errors, touched }) =>
                   <Form>
-                    <VStack w="sm" gap={4} p={10} background="white" borderRadius="lg" boxShadow="lg">
+                    <VStack w="sm" gap={2} p={10} background="white" borderRadius="lg" boxShadow="lg">
                       <InputField
                         name="gatewayId"
                         errorMessage={errors.gatewayId}
@@ -155,6 +169,14 @@ function RegisterDevice() {
                         type="text"
                         isInvalid={Boolean(errors.gatewayName && touched.gatewayName)}
                       />
+                      <FormControl>
+                        <FormLabel color="gray.800">Search location</FormLabel>
+                        <SearchLocation theme='light' onSelectItem={setLocationFromSearch} />
+                      </FormControl>
+                      <Box textAlign="center" w="full" transform="translateY(50%)">
+                        <Divider borderColor="gray.200" />
+                        <Text transform="translateY(-60%)" px={2} background="white" mx="auto" w="fit-content" color="gray.500">or add manually</Text>
+                      </Box>
                       <InputField
                         name="lat"
                         errorMessage={errors.lat}
@@ -191,7 +213,7 @@ function RegisterDevice() {
         </Box>
       </Flex>
 
-      <ConfirmationModal activeStep={activeStep} resetSteps={reset} transactionHash={transactionHash} isOpen={isOpen} onClose={onClose} />
+      <ConfirmationModal activeStep={activeStep} resetSteps={reset} transactionHash={transactionHash} isOpen={isOpen} onClose={onHandleClose} />
       <CheckConnectionModal isOpen={!isWeb3Enabled} />
     </>
   );

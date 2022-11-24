@@ -23,7 +23,6 @@ function ConfirmationModal({ isOpen, onClose, activeStep, transactionHash, reset
     resetSteps();
   }
 
-
   const contents = [
     <VStack key={0} mt={4}>
       <Heading fontSize="2xl">Staring transaction...</Heading>
@@ -31,14 +30,14 @@ function ConfirmationModal({ isOpen, onClose, activeStep, transactionHash, reset
     <VStack key={1} mt={4}>
       <Heading fontSize="2xl">Registering...</Heading>
       <Text fontSize="xl">View transaction on Etherscan:</Text>
-      <Link href={`https://goerli.etherscan.io/tx/${transactionHash}`} isExternal>
+      <Link _hover={{ color: 'purple.200', textDecoration: 'underline' }} href={`https://goerli.etherscan.io/tx/${transactionHash}`} isExternal>
         {transactionHash.slice(0, 6)}...{transactionHash.slice(transactionHash.length - 6)} <ExternalLinkIcon mx='2px' />
       </Link>
     </VStack>,
     <VStack key={2} mt={4}>
       <Heading fontSize="2xl">Transaction completed!</Heading>
       <Text fontSize="xl">View transaction on Etherscan:</Text>
-      <Link href={`https://goerli.etherscan.io/tx/${transactionHash}`} isExternal>
+      <Link _hover={{ color: 'purple.200', textDecoration: 'underline' }} href={`https://goerli.etherscan.io/tx/${transactionHash}`} isExternal>
         {transactionHash.slice(0, 6)}...{transactionHash.slice(transactionHash.length - 6)} <ExternalLinkIcon mx='2px' />
       </Link>
     </VStack>,
