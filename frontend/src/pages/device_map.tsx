@@ -22,14 +22,11 @@ interface DeviceMapProps {
 function DeviceMap({ gateways }: DeviceMapProps ) {
   
   const [initialPos, setInitialPos] = useState<Position | null>(null);
-  const [searchLocation, setSearchLocation] = useState('');
   const mapRef = useRef<MapRef>() as RefObject<MapRef>;
   const [markerDim, setMarkerDim] = useState(normalizeMarkerDim(DEFAULT_ZOOM));
   const [selectedGatewayIndex, setSelectedGatewayIndex] = useState(-1);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
-  
-  const forwardPosition = trpc.useMutation(['position.forward']);
 
   useEffect(() => {
     console.log(gateways);
@@ -42,16 +39,8 @@ function DeviceMap({ gateways }: DeviceMapProps ) {
     });
   }, []);
 
-  async function onSubmit(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    try {
-      const { data } = await forwardPosition.mutateAsync({
-        location: searchLocation
-      });
-      mapRef.current?.flyTo({ center: [data.long, data.lat], zoom: 10 });
-    } catch (err: any) {
-      console.log(err);
-    }
+  function setMapLocation(lat: number, long: number) {
+    mapRef.current?.flyTo({ center: [long, lat], zoom: 10 });
   }
 
   if(!initialPos) {
@@ -64,21 +53,14 @@ function DeviceMap({ gateways }: DeviceMapProps ) {
 
   return (
     <>
-      <MapNavbar 
-        isLoading={forwardPosition.isLoading} 
-        searchLocation={searchLocation} 
-        setSearchLocation={setSearchLocation} 
-        onSubmit={onSubmit} 
-      />
-
+      <MapNavbar setMapLocation={setMapLocation} />
       <Drawer placement="left" onClose={onClose} isOpen={isOpen}>
         <DrawerOverlay />
         <DrawerContent>
           <DrawerCloseButton />
           <DrawerHeader>{gateways[selectedGatewayIndex]?.name}</DrawerHeader>
           <Divider />
-          <DrawerBody>
-            
+          <DrawerBody>           
           </DrawerBody>
         </DrawerContent>
       </Drawer>

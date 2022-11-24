@@ -5,17 +5,17 @@ import * as z from 'zod';
 export const positionRouter = trpc.router<Context>()
   .mutation('forward', {
     input: z.object({
-      location: z.string()
+      searchTerm: z.string()
     }),
     resolve: async ({ input }) => {
       try {
         const url = new URL('http://api.positionstack.com/v1/forward');
         url.searchParams.append('access_key', process.env.POSITIONSTACK_API_KEY!);
-        url.searchParams.append('query', input.location);
-        url.searchParams.append('limit', '1');
+        url.searchParams.append('query', input.searchTerm);
+        url.searchParams.append('limit', '10');
         url.searchParams.append('output', 'json');
         const res = await fetch(url);
-        const { data }: { data: { latitude: number, longitude: number }[] } = await res.json();
+        const { data }: { data: { latitude: number, longitude: number, label: string }[] } = await res.json();
 
         if (data.length === 0) {
           throw new trpc.TRPCError({
@@ -27,8 +27,11 @@ export const positionRouter = trpc.router<Context>()
         return {
           success: true,
           data: {
-            lat: data[0].latitude,
-            long: data[0].longitude
+            locations: data.map(l => ({
+              lat: l.latitude,
+              long: l.longitude,
+              label: l.label
+            }))
           }
         };
       } catch (err: any) {
