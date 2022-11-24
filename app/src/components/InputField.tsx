@@ -1,6 +1,6 @@
-import { FormControl, As, FormErrorMessage, FormLabel, Icon, Input, InputGroup, InputLeftElement, InputProps } from '@chakra-ui/react';
+import { As, FormControl, FormErrorMessage, FormLabel, Icon, Input, InputGroup, InputLeftElement, InputProps } from '@chakra-ui/react';
 import { Field, FieldProps } from 'formik';
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 
 export interface InputFieldProps extends InputProps {
   label: string

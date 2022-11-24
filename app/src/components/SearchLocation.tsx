@@ -1,5 +1,5 @@
 import { Search2Icon } from '@chakra-ui/icons';
-import { Box, Input, InputGroup, Text, InputLeftElement, Spinner, VStack, InputGroupProps } from '@chakra-ui/react';
+import { Box, Input, InputGroup, InputGroupProps, InputLeftElement, Spinner, Text, VStack } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { trpc } from '../common/client/trpc';
 import { SearchOption } from '../utils/types';
@@ -22,7 +22,6 @@ function SearchLocation({ onSelectItem, theme, ...r }: SearchLocationProps) {
       return;
     }
     const delayDebounceFn = setTimeout(() => {
-      console.log(searchTerm);
       forwardPosition.mutateAsync({ searchTerm }).then(r => {
         setSearchOptions(r.data.locations);
       }).catch((e) => {

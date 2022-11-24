@@ -1,13 +1,12 @@
-import {  Spinner, Center, Box, Drawer, DrawerOverlay, DrawerContent, DrawerHeader, DrawerBody, useDisclosure, Divider, DrawerCloseButton } from '@chakra-ui/react';
-import { FormEvent, useEffect, useState, useRef, RefObject } from 'react';
+import { Box, Center, Divider, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerHeader, DrawerOverlay, Spinner, useDisclosure } from '@chakra-ui/react';
+import { GetServerSideProps } from 'next';
+import { RefObject, useEffect, useRef, useState } from 'react';
 import Map, { MapRef, Marker } from 'react-map-gl';
-import { trpc } from '../common/client/trpc';
+import Web3 from 'web3';
+import { AbiItem } from 'web3-utils';
+import { abi, contractAddresses } from '../common/constants';
 import MapNavbar from '../components/MapNavbar';
 import { DEFAULT_ZOOM, normalizeMarkerDim } from '../utils';
-import { GetServerSideProps, } from 'next';
-import { abi, contractAddresses } from '../common/constants';
-import { AbiItem } from 'web3-utils';
-import Web3 from 'web3';
 import { GatewayPosition } from '../utils/types';
 
 interface Position {

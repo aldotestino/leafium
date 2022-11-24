@@ -1,23 +1,22 @@
 import { AddIcon } from '@chakra-ui/icons';
-import { Box, Image, Center, Text, Heading, VStack, Button, useMediaQuery, useToast, Flex, useDisclosure, FormControl, FormLabel, Divider } from '@chakra-ui/react';
+import { Box, Button, Center, Divider, Flex, FormControl, FormLabel, Heading, Image, Text, useDisclosure, useMediaQuery, useToast, VStack } from '@chakra-ui/react';
+import { useSteps } from 'chakra-ui-steps';
 import { Form, Formik, FormikProps } from 'formik';
 import { Leaf } from 'lucide-react';
 import NextLink from 'next/link';
+import { useRouter } from 'next/router';
 import { Ref, useEffect, useRef, useState } from 'react';
-import InputField from '../components/InputField';
-import { generateRandomName, isTx } from '../utils';
+import { useMoralis, useWeb3Contract } from 'react-moralis';
 import * as z from 'zod';
 import { toFormikValidationSchema } from 'zod-formik-adapter';
 import { trpc } from '../common/client/trpc';
 import { abi, contractAddresses } from '../common/constants';
-import { useMoralis, useWeb3Contract } from 'react-moralis';
-import ConfirmationModal from '../components/ConfirmationModal';
-import { useSteps } from 'chakra-ui-steps';
 import CheckConnectionModal from '../components/CheckConnectionModal';
-import { SearchOption } from '../utils/types';
+import ConfirmationModal from '../components/ConfirmationModal';
+import InputField from '../components/InputField';
 import SearchLocation from '../components/SearchLocation';
-import { router } from '@trpc/server';
-import { useRouter } from 'next/router';
+import { generateRandomName, isTx } from '../utils';
+import { SearchOption } from '../utils/types';
 
 const gatewaySchema = z.object({
   gatewayId: z.string().length(20).startsWith('eui-').regex(new RegExp('[a-zA-Z0-9]+$'), 'String must not contain special characrers'),
@@ -88,18 +87,24 @@ function RegisterDevice() {
       await checkGateway.mutateAsync({ gatewayId: values.gatewayId });
       onOpen();
       await addGateway({
-        onError: () => {
-          onClose();
+        onError: (e) => {
+          toast({
+            title: 'Error',
+            description: 'Gateway already registered!',
+            duration: 5000,
+            isClosable: true,
+            status: 'error',
+            position: 'top-right'
+          });
           reset();
+          onClose();
         },
         onSuccess: async (tx) => {
           nextStep();
           if(isTx(tx)) {
             setTransactionHash(tx.hash);
             await tx.wait(1);
-            await new Promise(res => setTimeout(res, 10000));
             nextStep();
-            console.log('gateway aggiunto');
           }
         },
         params: {
@@ -123,7 +128,7 @@ function RegisterDevice() {
     <>
       <Flex align="start">
         {isLg && 
-        <Box flex={1}>
+        <Box flex={1} minH="100vh">
           <Box p={10}>
             <NextLink href="/" passHref>
               <Leaf cursor="pointer" size={36} strokeWidth={3} />
@@ -133,14 +138,14 @@ function RegisterDevice() {
             <Image src='./illustration2.svg' />
           </Center>
         </Box>}
-        <Box bg="gray.100" flex={1}>
+        <Box bg="gray.100" flex={1} minH="100vh">
           {!isLg && 
           <Box p={10}>
             <NextLink href="/" passHref>
               <Leaf cursor="pointer" color='#1A202C' size={36} strokeWidth={3} />
             </NextLink>
           </Box>}
-          <Center m={0} pt={!isLg ? 0 : 10} pb={10}>
+          <Box m={0} pt={!isLg ? 0 : 10} pb={10}>
             <VStack gap={4}>
               <Heading color="gray.800">Register your device</Heading>
               <Formik
@@ -209,7 +214,7 @@ function RegisterDevice() {
                 }
               </Formik>
             </VStack>
-          </Center>
+          </Box>
         </Box>
       </Flex>
 

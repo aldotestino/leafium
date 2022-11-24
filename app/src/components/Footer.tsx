@@ -1,4 +1,4 @@
-import { HStack, VStack, Heading, Link } from '@chakra-ui/react';
+import { Heading, HStack, Link, VStack } from '@chakra-ui/react';
 import { Leaf } from 'lucide-react';
 
 function Footer() {

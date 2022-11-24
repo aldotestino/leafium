@@ -15,8 +15,9 @@ contract Leafium {
     LeafiumToken token;
 
     mapping(address => Gateway[]) private userToGateways;
+    mapping(string => bool) private gatewayExists;
     Gateway[] private gateways;
-    uint256 reward = 50 * (10**18);
+    uint256 reward = 50 * (10 ** 18);
 
     constructor(address tokenAddress) {
         token = LeafiumToken(tokenAddress);
@@ -36,7 +37,12 @@ contract Leafium {
             long,
             altitude
         );
+        require(
+            gatewayExists[gatewayId] == false,
+            "Gateway already registered!"
+        );
         gateways.push(newGateway);
+        gatewayExists[gatewayId] = true;
         userToGateways[msg.sender].push(newGateway);
         token.rewardTo(msg.sender, reward);
     }

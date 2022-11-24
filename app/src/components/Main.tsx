@@ -1,7 +1,7 @@
-import { Heading, HStack, VStack, Box, Text, Button, Image, useMediaQuery } from '@chakra-ui/react';
+import { Box, Button, Heading, HStack, Image, Text, useMediaQuery, VStack } from '@chakra-ui/react';
 import { Map, RadioReceiver } from 'lucide-react';
-import Navbar from './Navbar';
 import NextLink from 'next/link';
+import Navbar from './Navbar';
 
 function Main() {
 

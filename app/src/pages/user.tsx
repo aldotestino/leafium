@@ -1,17 +1,17 @@
-import { useEffect, useState } from 'react';
-import { useMoralis, useWeb3Contract } from 'react-moralis';
-import Navbar from '../components/Navbar';
-import { useRouter } from 'next/router';
-import { Image, Heading, HStack, VStack, Icon, Center, Spinner, SimpleGrid, Text, Button } from '@chakra-ui/react';
-import { addressShortener } from '../utils';
-import { abi, contractAddresses } from '../common/constants';
+import { Button, Center, Heading, HStack, Icon, Image, SimpleGrid, Spinner, Text, VStack } from '@chakra-ui/react';
 import { FaceFrownIcon } from '@heroicons/react/24/outline';
-import { GatewayPosition } from '../utils/types';
-import { trpc } from '../common/client/trpc';
 import { BigNumber } from 'ethers';
-import DeviceCard from '../components/DeviceCard';
 import { RadioReceiver } from 'lucide-react';
 import NextLink from 'next/link';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
+import { useMoralis, useWeb3Contract } from 'react-moralis';
+import { trpc } from '../common/client/trpc';
+import { abi, contractAddresses } from '../common/constants';
+import DeviceCard from '../components/DeviceCard';
+import Navbar from '../components/Navbar';
+import { addressShortener } from '../utils';
+import { GatewayPosition } from '../utils/types';
 
 function User() {
 
@@ -21,9 +21,6 @@ function User() {
   const [gateways, setGateways] = useState<GatewayPosition[]>([]);
   const [balance, setBalance] = useState<string>('0');
   const [loading, setLoading] = useState(true);
-
-  //console.log(gateways);
-  //console.log(balance.toString());
 
   const leafiumContractAddress = chainId in contractAddresses ? contractAddresses[chainId][0] : null;
 
@@ -80,7 +77,7 @@ function User() {
             <Heading size="lg">{addressShortener(account)}</Heading>
             {(balance && !loading) && 
               <Text fontSize="xl">{balance.length > 1 ? balance.substring(0, balance.length - 18) : balance}
-                <Text bgGradient="linear(to-r, purple.500 50%, blue.500)" bgClip="text" display="inline"> LFM</Text>
+                <Text as="span" bgGradient="linear(to-r, purple.500 50%, blue.500)" bgClip="text" display="inline"> LFM</Text>
               </Text>
             }
           </HStack>
@@ -92,7 +89,7 @@ function User() {
             </Center> :
             <>
               {gateways.length > 0 ? 
-                <SimpleGrid w="full" gap={20} columns={[1, 1, 1, 1, 2, 3]}>
+                <SimpleGrid w="full" gap={4} columns={[1, 1, 1, 2, 3]}>
                   {gateways.map((g, i) =>
                     <DeviceCard key={i} {...g} />
                   )}

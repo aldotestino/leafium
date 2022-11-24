@@ -1,4 +1,4 @@
-import { VStack, Heading, Table, Tbody, Tr, Td, TableContainer, Tag, HStack, Link } from '@chakra-ui/react';
+import { Heading, HStack, Link, Table, TableContainer, Tag, Tbody, Td, Tr, VStack } from '@chakra-ui/react';
 import { SupportedDevice, supportedDevices } from '../utils/data';
 
 function SupportedDevices() {

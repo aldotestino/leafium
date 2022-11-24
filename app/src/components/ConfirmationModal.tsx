@@ -1,7 +1,7 @@
-import { VStack, Text, Button, Modal, ModalBody, ModalContent, ModalFooter, ModalOverlay, Link, Heading } from '@chakra-ui/react';
-import { CubeTransparentIcon, CheckCircleIcon } from '@heroicons/react/24/outline';
-import { Step, Steps } from 'chakra-ui-steps';
 import { ExternalLinkIcon } from '@chakra-ui/icons';
+import { Button, Heading, Link, Modal, ModalBody, ModalContent, ModalFooter, ModalOverlay, Text, VStack } from '@chakra-ui/react';
+import { CheckCircleIcon, CubeTransparentIcon } from '@heroicons/react/24/outline';
+import { Step, Steps } from 'chakra-ui-steps';
 
 const steps = [
   { label: 'Step 1', description: 'Transfer', icon: CubeTransparentIcon },
@@ -25,10 +25,10 @@ function ConfirmationModal({ isOpen, onClose, activeStep, transactionHash, reset
 
   const contents = [
     <VStack key={0} mt={4}>
-      <Heading fontSize="2xl">Staring transaction...</Heading>
+      <Heading fontSize="2xl">Starting transaction...</Heading>
     </VStack>,
     <VStack key={1} mt={4}>
-      <Heading fontSize="2xl">Registering...</Heading>
+      <Heading fontSize="2xl">Waiting for confimation...</Heading>
       <Text fontSize="xl">View transaction on Etherscan:</Text>
       <Link _hover={{ color: 'purple.200', textDecoration: 'underline' }} href={`https://goerli.etherscan.io/tx/${transactionHash}`} isExternal>
         {transactionHash.slice(0, 6)}...{transactionHash.slice(transactionHash.length - 6)} <ExternalLinkIcon mx='2px' />

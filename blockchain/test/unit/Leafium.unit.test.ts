@@ -23,18 +23,15 @@ describe('Leafium unit test', () => {
   });
 
   it('Allows to add a gateway', async () => {
-    const tx = await leafium.addGateway('eui-8989898989', 'lucky lizard', '41.16092034214199', '16.4141807908589', 20);
-    await tx.wait(1);
-    const tx1 = await leafium.addGateway('eui-89898989891', 'lucky lizard1', '41.16092034214199', '16.4141807908589', 20);
-    await tx1.wait(1);
+    await leafium.addGateway('eui-8989898989', 'lucky lizard', '41.16092034214199', '16.4141807908589', 20);
+    await leafium.addGateway('eui-89898989891', 'lucky lizard1', '41.16092034214199', '16.4141807908589', 20);
     const myGateways = await leafium.getMyGateways();
     const gateways = await leafium.getGateways();
     assert.deepEqual(myGateways, gateways);
   });
 
   it('getMyGateways allows to view only your gateways', async () => {
-    const tx = await leafium.addGateway('eui-8989898989', 'lucky lizard', '41.16092034214199', '16.4141807908589', 20);
-    await tx.wait(1);
+    await leafium.addGateway('eui-8989898989', 'lucky lizard', '41.16092034214199', '16.4141807908589', 20);
     const myGateways = await leafium.getMyGateways();
     expect(myGateways).to.be.not.empty;
 
@@ -47,8 +44,7 @@ describe('Leafium unit test', () => {
   });
 
   it('gives reward to the user that registered the gateway', async () => {
-    const tx = await leafium.addGateway('eui-8989898989', 'lucky lizard', '41.16092034214199', '16.4141807908589', 20);
-    await tx.wait(1);
+    await leafium.addGateway('eui-8989898989', 'lucky lizard', '41.16092034214199', '16.4141807908589', 20);
     const reward = ethers.utils.parseEther('50');
     const userBalance = await leafium.getBalance();
 
@@ -58,13 +54,19 @@ describe('Leafium unit test', () => {
   it('removes tokens from the token after a registration', async () => {
     const totalSupply = await leafiumToken.totalSupply();
 
-    const tx = await leafium.addGateway('eui-8989898989', 'lucky lizard', '41.16092034214199', '16.4141807908589', 20);
-    await tx.wait(1);
+    await leafium.addGateway('eui-8989898989', 'lucky lizard', '41.16092034214199', '16.4141807908589', 20);
 
     const userBalance = await leafium.getBalance();
 
     const availableTokens = await leafiumToken.balanceOf(leafiumToken.address);
 
     expect(userBalance.add(availableTokens)).to.be.deep.equal(totalSupply);
+  });
+
+  it('doesn\'t allow to register a gateway more then one time', async () => {
+    await leafium.addGateway('eui-8989898989', 'lucky lizard', '41.16092034214199', '16.4141807908589', 20);
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    await expect(leafium.addGateway('eui-8989898989', 'lucky lizard', '41.16092034214199', '16.4141807908589', 20)).to.be.revertedWith('Gateway already registered!');
   });
 });

@@ -1,9 +1,8 @@
 import { Button, Heading, HStack, Link, useMediaQuery } from '@chakra-ui/react';
 import { Leaf, User } from 'lucide-react';
-import { Wallet } from 'lucide-react';
-import { useMoralis } from 'react-moralis';
-import { useRouter } from 'next/router';
 import NextLink from 'next/link';
+import { useRouter } from 'next/router';
+import { useMoralis } from 'react-moralis';
 import { addressShortener } from '../utils';
 import ConnectButton from './ConnectButton';
 

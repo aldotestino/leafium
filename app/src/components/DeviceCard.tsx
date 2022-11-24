@@ -1,28 +1,30 @@
-import { HStack, VStack, Icon, Text, Card, CardHeader, CardBody } from '@chakra-ui/react';
+import { Card, CardBody, CardHeader, Divider, HStack, Icon, Text, VStack } from '@chakra-ui/react';
+import { ArrowTrendingUpIcon, CurrencyDollarIcon, MapPinIcon } from '@heroicons/react/24/outline';
 import { RadioReceiver } from 'lucide-react';
-import { MapPinIcon, CurrencyDollarIcon, ArrowTrendingUpIcon } from '@heroicons/react/24/outline';
 import { GatewayPosition } from '../utils/types';
 
 function DeviceCard({ name, locality, altitude }  : GatewayPosition) {
   return (
-    <Card borderRadius="lg" bg="gray.900" w="md" maxW="xl" boxShadow="lg" >
-      <CardHeader>
-        <HStack color="white" fontWeight='bold' fontSize="x-large" >
+    <Card borderRadius="lg" bg="gray.900" color="white" justifySelf="center" w="sm" maxW="md" boxShadow="lg" transition="ease 0.2s" _hover={{ transform: 'scale(1.01)' }}>
+      <CardHeader pb={4}>
+        <HStack fontWeight='bold' fontSize="x-large" >
           <RadioReceiver size={50}/>
-          <Text >{name}</Text>
+          <Text>{name}</Text>
         </HStack>
       </CardHeader>
-      <CardBody>
-        <VStack alignItems="left" color="white">
+      <Divider />
+      <CardBody pt={4}>
+        <VStack alignItems="left">
           <HStack>
-            <Icon as={MapPinIcon} h="6" w="6" color="purple.500" />
-            <Text fontSize="lg" >{locality}</Text>
-          </HStack >
+            <Icon as={MapPinIcon} h="6" w="6" color="purple.400" />
+            <Text fontSize="lg">{locality}</Text>
+          </HStack>
           <HStack>
-            <Icon as={ArrowTrendingUpIcon} h="6" w="6" color="purple.500" />
+            <Icon as={ArrowTrendingUpIcon} h="6" w="6" color="purple.400" />
             <Text fontSize="lg">{altitude}</Text>
           </HStack >
-          <HStack><Icon as={CurrencyDollarIcon} h="6" w="6" color="purple.500" />
+          <HStack>
+            <Icon as={CurrencyDollarIcon} h="6" w="6" color="purple.400" />
             <Text fontSize="lg">50 LFM</Text>
           </HStack >
         </VStack>

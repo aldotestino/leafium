@@ -1,4 +1,4 @@
-import { VStack, Heading, SimpleGrid, Image, Tag, Box, HStack, Text } from '@chakra-ui/react';
+import { Box, Heading, HStack, Image, SimpleGrid, Tag, Text, VStack } from '@chakra-ui/react';
 import { UseCase, useCases } from '../utils/data';
 
 function UseCases() {
