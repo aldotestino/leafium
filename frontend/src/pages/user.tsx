@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useMoralis, useWeb3Contract } from 'react-moralis';
 import Navbar from '../components/Navbar';
 import { useRouter } from 'next/router';
-import { Image, Heading, HStack, VStack, Badge, Icon, Center, Spinner, SimpleGrid, Text, Button } from '@chakra-ui/react';
+import { Image, Heading, HStack, VStack, Icon, Center, Spinner, SimpleGrid, Text, Button } from '@chakra-ui/react';
 import { addressShortener } from '../utils';
 import { abi, contractAddresses } from '../common/constants';
 import { FaceFrownIcon } from '@heroicons/react/24/outline';

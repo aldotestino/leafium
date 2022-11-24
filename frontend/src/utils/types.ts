@@ -6,3 +6,9 @@ export interface GatewayPosition {
   altitude: number,
   locality?: string
 }
+
+export interface SearchOption {
+  lat: number
+  long: number
+  label: string
+}

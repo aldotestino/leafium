@@ -1,5 +1,5 @@
-import { AddIcon } from '@chakra-ui/icons';
-import { Box, Image, Center, Heading, VStack, Button, useMediaQuery, useToast, Flex, useDisclosure } from '@chakra-ui/react';
+import { AddIcon, Search2Icon } from '@chakra-ui/icons';
+import { Box, Image, Center, Text, Heading, VStack, Button, useMediaQuery, useToast, Flex, useDisclosure, InputLeftElement, Spinner, Input, InputGroup, FormControl, FormLabel, Divider } from '@chakra-ui/react';
 import { Form, Formik, FormikProps } from 'formik';
 import { Leaf } from 'lucide-react';
 import NextLink from 'next/link';
@@ -14,6 +14,8 @@ import { useMoralis, useWeb3Contract } from 'react-moralis';
 import ConfirmationModal from '../components/ConfirmationModal';
 import { useSteps } from 'chakra-ui-steps';
 import CheckConnectionModal from '../components/CheckConnectionModal';
+import { SearchOption } from '../utils/types';
+import SearchLocation from '../components/SearchLocation';
 
 const gatewaySchema = z.object({
   gatewayId: z.string().length(20).startsWith('eui-').regex(new RegExp('[a-zA-Z0-9]+$'), 'String must not contain special characrers'),
@@ -38,6 +40,32 @@ function RegisterDevice() {
   const [isLg] = useMediaQuery('(min-width: 62em)');
   const formRef = useRef<FormikProps<GatewaySchema>>();
   const checkGateway = trpc.useMutation(['device.check']);
+
+  // START AUTOCOMPLETE CONTROLS
+  const [searchTerm, setSearchTerm] = useState('');
+  const [showOptions, setShowOptions] = useState(true);
+  const [searchOptions, setSearchOptions] = useState<SearchOption[]>([]);
+  const forwardPosition = trpc.useMutation(['position.forward']);
+
+  useEffect(() => {
+    if(searchTerm === '') {
+      setSearchOptions([]);
+      return;
+    }
+    const delayDebounceFn = setTimeout(() => {
+      console.log(searchTerm);
+      forwardPosition.mutateAsync({ searchTerm }).then(r => {
+        console.log(r);
+        setSearchOptions(r.data.locations);
+      }).catch((e) => {
+        console.log(e.message);
+        setSearchOptions([]);
+      });
+    }, 500);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [searchTerm]);
+  // END AUTOCOMPLETE CONTROLS
 
   const toast = useToast();
 
@@ -66,6 +94,11 @@ function RegisterDevice() {
       formRef.current?.setFieldValue('long', coords.longitude.toString());
     });
   }, []);
+
+  function setLocationFromSearch({ lat, long }: SearchOption) {
+    formRef.current?.setFieldValue('lat', lat.toString());
+    formRef.current?.setFieldValue('long', long.toString());
+  }
 
   async function onSubmit(values: GatewaySchema) {
     try {
@@ -134,7 +167,7 @@ function RegisterDevice() {
               >
                 {({ errors, touched }) =>
                   <Form>
-                    <VStack w="sm" gap={4} p={10} background="white" borderRadius="lg" boxShadow="lg">
+                    <VStack w="sm" gap={2} p={10} background="white" borderRadius="lg" boxShadow="lg">
                       <InputField
                         name="gatewayId"
                         errorMessage={errors.gatewayId}
@@ -151,6 +184,14 @@ function RegisterDevice() {
                         type="text"
                         isInvalid={Boolean(errors.gatewayName && touched.gatewayName)}
                       />
+                      <FormControl>
+                        <FormLabel color="gray.800">Search location</FormLabel>
+                        <SearchLocation theme='light' onSelectItem={setLocationFromSearch} />
+                      </FormControl>
+                      <Box textAlign="center" w="full" transform="translateY(50%)">
+                        <Divider borderColor="gray.200" />
+                        <Text transform="translateY(-60%)" px={2} background="white" mx="auto" w="fit-content" color="gray.500">or add manually</Text>
+                      </Box>
                       <InputField
                         name="lat"
                         errorMessage={errors.lat}
