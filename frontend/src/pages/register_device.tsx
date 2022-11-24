@@ -1,5 +1,5 @@
-import { AddIcon, Search2Icon } from '@chakra-ui/icons';
-import { Box, Image, Center, Text, Heading, VStack, Button, useMediaQuery, useToast, Flex, useDisclosure, InputLeftElement, Spinner, Input, InputGroup, FormControl, FormLabel, Divider } from '@chakra-ui/react';
+import { AddIcon } from '@chakra-ui/icons';
+import { Box, Image, Center, Text, Heading, VStack, Button, useMediaQuery, useToast, Flex, useDisclosure, FormControl, FormLabel, Divider } from '@chakra-ui/react';
 import { Form, Formik, FormikProps } from 'formik';
 import { Leaf } from 'lucide-react';
 import NextLink from 'next/link';
@@ -16,11 +16,13 @@ import { useSteps } from 'chakra-ui-steps';
 import CheckConnectionModal from '../components/CheckConnectionModal';
 import { SearchOption } from '../utils/types';
 import SearchLocation from '../components/SearchLocation';
+import { router } from '@trpc/server';
+import { useRouter } from 'next/router';
 
 const gatewaySchema = z.object({
   gatewayId: z.string().length(20).startsWith('eui-').regex(new RegExp('[a-zA-Z0-9]+$'), 'String must not contain special characrers'),
   gatewayName: z.string(),
-  lat: z.string().regex(new RegExp('^-?([0-8]?[0-9]|90)(\\.[0-9]{1,14})?$')),
+  lat: z.string().regex(new RegExp('^-?([0-8]?[0-9]|90)(\\.[0-9]{1,15})?$')),
   long: z.string().regex(new RegExp('^-?([0-9]{1,2}|1[0-7][0-9]|180)(\\.[0-9]{1,15})?$')),
   altitude: z.number().min(0).max(5000)
 });
@@ -41,33 +43,9 @@ function RegisterDevice() {
   const formRef = useRef<FormikProps<GatewaySchema>>();
   const checkGateway = trpc.useMutation(['device.check']);
 
-  // START AUTOCOMPLETE CONTROLS
-  const [searchTerm, setSearchTerm] = useState('');
-  const [showOptions, setShowOptions] = useState(true);
-  const [searchOptions, setSearchOptions] = useState<SearchOption[]>([]);
-  const forwardPosition = trpc.useMutation(['position.forward']);
-
-  useEffect(() => {
-    if(searchTerm === '') {
-      setSearchOptions([]);
-      return;
-    }
-    const delayDebounceFn = setTimeout(() => {
-      console.log(searchTerm);
-      forwardPosition.mutateAsync({ searchTerm }).then(r => {
-        console.log(r);
-        setSearchOptions(r.data.locations);
-      }).catch((e) => {
-        console.log(e.message);
-        setSearchOptions([]);
-      });
-    }, 500);
-
-    return () => clearTimeout(delayDebounceFn);
-  }, [searchTerm]);
-  // END AUTOCOMPLETE CONTROLS
-
   const toast = useToast();
+
+  const router = useRouter();
 
   const { chainId: chainIdHex, isWeb3Enabled } = useMoralis();
   const chainId = parseInt(chainIdHex || '0x0').toString() as keyof typeof contractAddresses;
@@ -87,6 +65,11 @@ function RegisterDevice() {
   const [transactionHash, setTransactionHash] = useState('');
 
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  function onHandleClose() {
+    onClose();
+    router.push('/device_map');
+  }
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(({ coords }) => {
@@ -116,13 +99,13 @@ function RegisterDevice() {
             await tx.wait(1);
             await new Promise(res => setTimeout(res, 10000));
             nextStep();
+            console.log('gateway aggiunto');
           }
         },
         params: {
           params: values
         }
       });
-      console.log('gateway aggiunto');
     }catch(e: any) {
       console.log(e.message);
       toast({
@@ -139,7 +122,8 @@ function RegisterDevice() {
   return (
     <>
       <Flex align="start">
-        {isLg && <Box flex={1}  minH="100vh">
+        {isLg && 
+        <Box flex={1}>
           <Box p={10}>
             <NextLink href="/" passHref>
               <Leaf cursor="pointer" size={36} strokeWidth={3} />
@@ -149,14 +133,15 @@ function RegisterDevice() {
             <Image src='./illustration2.svg' />
           </Center>
         </Box>}
-        <Box minH="100vh" bg="gray.100" flex={1}>
-          {!isLg && <Box p={10}>
+        <Box bg="gray.100" flex={1}>
+          {!isLg && 
+          <Box p={10}>
             <NextLink href="/" passHref>
               <Leaf cursor="pointer" color='#1A202C' size={36} strokeWidth={3} />
             </NextLink>
           </Box>}
-          <Center h={isLg ? '100vh' : 'full'} m={0} pt={!isLg ? 0 : 10} pb={10}>
-            <VStack gap={10}>
+          <Center m={0} pt={!isLg ? 0 : 10} pb={10}>
+            <VStack gap={4}>
               <Heading color="gray.800">Register your device</Heading>
               <Formik
                 innerRef={formRef as Ref<FormikProps<GatewaySchema>>}
@@ -228,7 +213,7 @@ function RegisterDevice() {
         </Box>
       </Flex>
 
-      <ConfirmationModal activeStep={activeStep} resetSteps={reset} transactionHash={transactionHash} isOpen={isOpen} onClose={onClose} />
+      <ConfirmationModal activeStep={activeStep} resetSteps={reset} transactionHash={transactionHash} isOpen={isOpen} onClose={onHandleClose} />
       <CheckConnectionModal isOpen={!isWeb3Enabled} />
     </>
   );

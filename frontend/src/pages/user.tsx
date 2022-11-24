@@ -64,10 +64,9 @@ function User() {
           setLoading(false);
         });
       });
-      getBalance().then(b => {
-        //console.log((b as BigNumber).toString())
-        setBalance((b as BigNumber).toString());
-      });
+      getBalance().then(b => 
+        setBalance((b as BigNumber).toString())
+      );
     }
   }, [isWeb3EnableLoading, isWeb3Enabled, account]);
 
@@ -76,36 +75,39 @@ function User() {
       <>
         <Navbar />
         <VStack py={10} px={[5, 5, 10, 32]} align="start" gap={4}>
-          <HStack gap={50} align="baseline"><HStack gap={2} align="baseline">
+          <HStack gap={2} align="baseline">
             <Image w={10} h={10} src={`https://avatars.dicebear.com/api/identicon/${account}.svg`} />
             <Heading size="lg">{addressShortener(account)}</Heading>
+            {(balance && !loading) && 
+              <Text fontSize="xl">{balance.length > 1 ? balance.substring(0, balance.length - 18) : balance}
+                <Text bgGradient="linear(to-r, purple.500 50%, blue.500)" bgClip="text" display="inline"> LFM</Text>
+              </Text>
+            }
           </HStack>
-          {balance && !loading && <Heading size="lg">Total Balance:  {balance.length > 1 ? balance.substring(0, balance.length - 18) : balance} <Text bgGradient="linear(to-r, purple.500 50%, blue.500)" bgClip="text" display="inline">LFM</Text></Heading>}
-          </HStack>
-          <Heading>Your devices</Heading>
+          <Heading size="lg">Your devices</Heading>
 
           {loading ?
             <Center w="100%">
               <Spinner size="lg" color="purple.200" />
             </Center> :
             <>
-              {gateways.length > 0 ? <SimpleGrid w="full" gap={20} columns={[1, 1, 1, 1, 2, 3]}>
-
-                {gateways.map((g, i) =>
-                  <DeviceCard key={i} {...g} />
-                )}
-
-              </SimpleGrid> :
+              {gateways.length > 0 ? 
+                <SimpleGrid w="full" gap={20} columns={[1, 1, 1, 1, 2, 3]}>
+                  {gateways.map((g, i) =>
+                    <DeviceCard key={i} {...g} />
+                  )}
+                </SimpleGrid> :
                 <Center w="100%">
-
                   <VStack gap={5}>
-                    <Heading size="md" mt={5}><Icon as={FaceFrownIcon} /> No Registered Device</Heading>
+                    <HStack>
+                      <Icon as={FaceFrownIcon} w={10} h={10}/>
+                      <Heading size="md" mt={5}> No Registered Device</Heading>
+                    </HStack>
                     <NextLink href="/register_device" passHref>
                       <Button colorScheme="purple" variant="outline" leftIcon={<RadioReceiver />}>Register device</Button>
                     </NextLink>
                   </VStack>
                 </Center>
-
               }
             </>
           }

@@ -60,7 +60,7 @@ function SearchLocation({ onSelectItem, theme, ...r }: SearchLocationProps) {
         color={theme === 'dark' ? 'inherit' : 'gray.800' }
         focusBorderColor="purple.400"
         placeholder='Search location' />
-      {(searchOptions.length && showOptions) > 0 && 
+      {(searchOptions.length > 0 && showOptions) && 
       <VStack 
         zIndex={10} 
         maxH="200px"
@@ -78,6 +78,7 @@ function SearchLocation({ onSelectItem, theme, ...r }: SearchLocationProps) {
         {searchOptions.map((o, i) => 
           <Box borderRadius="md" onClick={(e) => {
             e.stopPropagation();
+            setSearchTerm(o.label);
             onSelectItem(o);
             setShowOptions(false);
           }} w="full" _hover={{ background: theme === 'dark' ? 'gray.700' : 'white' }} p={2} key={i} cursor="pointer">
