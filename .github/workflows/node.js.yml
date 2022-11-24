@@ -12,6 +12,8 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    env:
+      INITIAL_SUPPLY: 1000000000000000000000
     strategy:
       matrix:
         node-version: [16.x]
