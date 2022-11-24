@@ -1,14 +1,12 @@
 import { network } from 'hardhat';
 import 'dotenv/config';
 import { DeployFunction } from 'hardhat-deploy/dist/types';
-import { developmentChains, helperNetworkConfig } from '../helper-hardhat-config';
+import { developmentChains, helperNetworkConfig, INITIAL_SUPPLY } from '../helper-hardhat-config';
 import verify from '../utils/verify';
 
 const deployContract: DeployFunction = async ({ getNamedAccounts, deployments }) => {
   const { deploy, log } = deployments;
   const { deployer } = await getNamedAccounts();
-
-  const { INITIAL_SUPPLY } = process.env;
 
   log('🚀 Deploying LeafiumToken🍃...');
   const leafiumToken = await deploy('LeafiumToken', {
