@@ -30,7 +30,7 @@ jobs:
       run: yarn --frozen-lockfile
       working-directory: ./blockchain
     - name: Deploy contracts
-      run: yarn deploy:localhost --tags leafium
+      run: yarn deploy:hardhat --tags leafium
       working-directory: ./blockchain
     - name: Run tests
       run: yarn test:unit
