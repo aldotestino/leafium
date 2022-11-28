@@ -51,7 +51,7 @@ describe('Leafium unit test', () => {
     assert.deepEqual(reward, userBalance);
   });
 
-  it('removes tokens from the token after a registration', async () => {
+  it('removes tokens from total supply after a registration', async () => {
     const totalSupply = await leafiumToken.totalSupply();
 
     await leafium.addGateway('eui-8989898989', 'lucky lizard', '41.16092034214199', '16.4141807908589', 20);
@@ -65,8 +65,6 @@ describe('Leafium unit test', () => {
 
   it('doesn\'t allow to register a gateway more then one time', async () => {
     await leafium.addGateway('eui-8989898989', 'lucky lizard', '41.16092034214199', '16.4141807908589', 20);
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
     await expect(leafium.addGateway('eui-8989898989', 'lucky lizard', '41.16092034214199', '16.4141807908589', 20)).to.be.revertedWith('Gateway already registered!');
   });
 });
