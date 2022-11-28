@@ -25,10 +25,5 @@ account = w3.eth.account.from_key(PRIVATE_KEY_2)
 w3.eth.defaultAccount = account.address
 
 leafium = w3.eth.contract(address=contract_address, abi=abi)
-getMyGateways = leafium.get_function_by_name('getMyGateways')
-
-gateways = leafium.caller().call_function(getMyGateways)
-print(gateways)
-
-
-
+awake = leafium.get_function_by_name('awake')
+leafium.caller().call_function(awake, "eui-3a0d8533b9824dad")
