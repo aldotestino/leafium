@@ -1,5 +1,6 @@
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import { assert, expect } from 'chai';
+import { parseEther } from 'ethers/lib/utils';
 import { deployments, ethers } from 'hardhat';
 import type { Leafium, LeafiumToken } from '../../typechain-types';
 
@@ -66,5 +67,18 @@ describe('Leafium unit test', () => {
   it('doesn\'t allow to register a gateway more then one time', async () => {
     await leafium.addGateway('eui-8989898989', 'lucky lizard', '41.16092034214199', '16.4141807908589', 20);
     await expect(leafium.addGateway('eui-8989898989', 'lucky lizard', '41.16092034214199', '16.4141807908589', 20)).to.be.revertedWith('Gateway already registered!');
+  });
+
+  it('gives tokens to the user if the gateway is on', async () => {
+    await leafium.addGateway('eui-8989898989', 'lucky lizard', '41.16092034214199', '16.4141807908589', 20);
+    const userBalanceBefore = await leafium.getBalance();
+    await leafium.awake('eui-8989898989');
+    const userBalanceAfter = await leafium.getBalance();
+    assert(userBalanceAfter.sub(userBalanceBefore).eq(parseEther('1')));
+  });
+
+  it('doesn\'t give tokens to the user if the gateway is not his', async () => {
+    await leafium.addGateway('eui-8989898989', 'lucky lizard', '41.16092034214199', '16.4141807908589', 20);
+    await expect(leafium.awake('eui-8989898981')).to.be.revertedWith('Gateway not found!');
   });
 });
