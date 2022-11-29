@@ -1,7 +1,7 @@
 import os
-
 from web3 import Web3
 import json
+from utils import set_interval
 
 pid = os.getpid()
 pid_file = open(".pid", "w")
@@ -33,6 +33,7 @@ account = w3.eth.account.from_key(PRIVATE_KEY)
 
 leafium = w3.eth.contract(address=contract_address, abi=abi)
 
+
 def awake():
     nonce = w3.eth.get_transaction_count(account.address)
 
@@ -48,7 +49,6 @@ def awake():
 
     w3.eth.send_raw_transaction(signed_tx.rawTransaction)
 
-# awake()
 
-while(True):
-    print("ciao")
+if __name__ == "__main__":
+    set_interval(awake, 60)

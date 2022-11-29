@@ -3,16 +3,25 @@
 {% block main %}
 <main>
 
-  <form action="/start_node" method="POST">
+  <form action="/configure_node" method="POST">
     <div class="field">
       <label class="label">Your private key</label>
       <div class="control">
-        <input class="input is-primary" id="key" name="key" required />
+        <input autocomplete="off" class="input is-primary" id="key" name="key" required />
       </div>
     </div>
-    <button type="submit" class="button is-primary">Start Node</button>
+    <button type="submit" class="button">Configure Node</button>
   </form>
 
+  {% if is_daemon_running %}
+  <form action="/stop_node" method="POST">
+    <button type="submit" class="button">Stop Node</button>
+  </form>
+  {% else %}
+  <form action="/start_node" method="POST">
+    <button type="submit" class="button">Start Node</button>
+  </form>
+  {% endif %}
 
 </main>
 {% endblock %}
