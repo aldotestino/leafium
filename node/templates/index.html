@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block main %}
+<main>
+
+  <form action="/start_node" method="POST">
+    <div class="field">
+      <label class="label">Your private key</label>
+      <div class="control">
+        <input class="input is-primary" id="key" name="key" required />
+      </div>
+    </div>
+    <button type="submit" class="button is-primary">Start Node</button>
+  </form>
+
+
+</main>
+{% endblock %}
