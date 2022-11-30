@@ -18,6 +18,7 @@ contract Leafium {
     mapping(string => bool) private gatewayExists;
     Gateway[] private gateways;
     uint256 reward = 50 * (10 ** 18);
+    uint256 awakeReward = 1 * (10 ** 18);
 
     constructor(address tokenAddress) {
         token = LeafiumToken(tokenAddress);
@@ -57,5 +58,21 @@ contract Leafium {
 
     function getBalance() public view returns (uint256) {
         return token.balanceOf(msg.sender);
+    }
+
+    function awake(string memory gatewayId) public {
+        Gateway[] memory userGateways = userToGateways[msg.sender];
+        bool isOfUser = false;
+        for (uint256 i = 0; i < userGateways.length; i++) {
+            if (
+                keccak256(bytes(userGateways[i].id)) ==
+                keccak256(bytes(gatewayId))
+            ) {
+                isOfUser = true;
+                break;
+            }
+        }
+        require(isOfUser, "Gateway not found!");
+        token.rewardTo(msg.sender, awakeReward);
     }
 }
