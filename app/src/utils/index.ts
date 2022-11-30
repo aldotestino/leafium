@@ -402,10 +402,15 @@ function isTx(obj: unknown): obj is { hash: string, wait: (blocks: number) => vo
   );
 }
 
+function isOffline(updatedAt: number) {
+  return ((Math.round(Date.now() / 1000) - updatedAt) > 5 * 60) || updatedAt === 0;
+}
+
 export {
   addressShortener,
   normalizeMarkerDim,
   generateRandomName,
   isTx,
+  isOffline,
   DEFAULT_ZOOM
 };

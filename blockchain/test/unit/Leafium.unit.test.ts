@@ -87,7 +87,6 @@ describe('Leafium unit test', () => {
     await leafium.awake('eui-8989898989');
     const gateway1 = (await leafium.getGateways())[0];
     const gateway2 = (await leafium.getMyGateways())[0];
-    //assert(gateway1.earnings.toString() === '51' && gateway2.earnings.toString() === '51');
-    console.log(gateway2);
+    assert(gateway1.earnings.toString() === '51' && gateway2.earnings.toString() === '51');
   });
 });

@@ -2,6 +2,7 @@ import { Box, Divider, Text, Heading, Drawer, DrawerBody, DrawerContent, DrawerH
 import { ArrowTrendingUpIcon, CpuChipIcon, CurrencyDollarIcon, GlobeAltIcon, MapPinIcon, SignalIcon, SignalSlashIcon } from '@heroicons/react/24/outline';
 import { useEffect } from 'react';
 import { trpc } from '../common/client/trpc';
+import { isOffline } from '../utils';
 import { Gateway } from '../utils/types';
 
 interface DeviceSidebarProps {
@@ -33,7 +34,10 @@ function DeviceSidebar({ onClose, isOpen, gateway }: DeviceSidebarProps) {
           <VStack align="start">
             <HStack justify="space-between" w="full">
               <Heading>{gateway?.name}</Heading>
-              <Icon as={SignalIcon} h="10" w="10" color="green.400" />
+              {isOffline(gateway?.updatedAt) ? 
+                <Icon as={SignalSlashIcon} h="10" w="10" color="red.400" /> :
+                <Icon as={SignalIcon} h="10" w="10" color="green.400" />  
+              }
             </HStack>
             <HStack justify="space-between" w="full">
               <HStack>

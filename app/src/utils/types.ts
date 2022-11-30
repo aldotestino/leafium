@@ -3,8 +3,9 @@ export interface Gateway {
   name: string
   lat: number
   long: number
-  altitude: number,
-  earnings: number,
+  altitude: number
+  earnings: number
+  updatedAt: number
   locality?: string
 }
 

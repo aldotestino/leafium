@@ -3,6 +3,9 @@ from web3 import Web3
 import json
 from utils import set_interval
 
+DEVICE_ID = "eui-9e66120755b3ea34"
+INTERVAL = 60
+
 pid = os.getpid()
 pid_file = open(".pid", "w")
 pid_file.write(f"{pid}")
@@ -37,9 +40,9 @@ leafium = w3.eth.contract(address=contract_address, abi=abi)
 def awake():
     nonce = w3.eth.get_transaction_count(account.address)
 
-    tx = leafium.functions.awake("eui-3a0d8533b9824dad").build_transaction({
+    tx = leafium.functions.awake(DEVICE_ID).build_transaction({
         "chainId": 31337,
-        "gas": 70000,
+        "gas": 200000,
         "maxFeePerGas": w3.toWei("2", "gwei"),
         "maxPriorityFeePerGas": w3.toWei("1", "gwei"),
         "nonce": nonce
@@ -51,4 +54,4 @@ def awake():
 
 
 if __name__ == "__main__":
-    set_interval(awake, 60)
+    set_interval(awake, INTERVAL = 60)

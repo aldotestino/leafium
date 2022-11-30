@@ -29,8 +29,6 @@ function DeviceMap({ gateways }: DeviceMapProps ) {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   useEffect(() => {
-    console.log(gateways);
-    
     navigator.geolocation.getCurrentPosition(({ coords }) => {
       setInitialPos({
         lat: coords.latitude,
@@ -105,6 +103,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
       lat: parseFloat(g.lat),
       long: parseFloat(g.long),
       altitude: parseInt(g.altitude),
+      updatedAt: parseInt(g.updatedAt),
       earnings: parseInt(g.earnings)
     } as Gateway)
     );

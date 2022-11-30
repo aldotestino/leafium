@@ -51,7 +51,6 @@ export const positionRouter = trpc.router<Context>()
       }).array()
     }),
     resolve: async ({ input }) => {
-      console.log(input);
       try {
         const locations: string[] = [];
 
