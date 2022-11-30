@@ -10,6 +10,7 @@ contract Leafium {
         string lat;
         string long;
         uint256 altitude;
+        uint256 earnings;
     }
 
     LeafiumToken token;
@@ -36,7 +37,8 @@ contract Leafium {
             gatewayName,
             lat,
             long,
-            altitude
+            altitude,
+            50
         );
         require(
             gatewayExists[gatewayId] == false,
@@ -61,14 +63,24 @@ contract Leafium {
     }
 
     function awake(string memory gatewayId) public {
-        Gateway[] memory userGateways = userToGateways[msg.sender];
         bool isOfUser = false;
-        for (uint256 i = 0; i < userGateways.length; i++) {
+        for (uint256 i = 0; i < userToGateways[msg.sender].length; i++) {
             if (
-                keccak256(bytes(userGateways[i].id)) ==
+                keccak256(bytes(userToGateways[msg.sender][i].id)) ==
                 keccak256(bytes(gatewayId))
             ) {
                 isOfUser = true;
+                uint256 updatedEarnings = userToGateways[msg.sender][i]
+                    .earnings + 1;
+                userToGateways[msg.sender][i].earnings = updatedEarnings;
+                for (uint256 j = 0; j < gateways.length; j++) {
+                    if (
+                        keccak256(bytes(gateways[j].id)) ==
+                        keccak256(bytes(gatewayId))
+                    ) {
+                        gateways[j].earnings = updatedEarnings;
+                    }
+                }
                 break;
             }
         }

@@ -1,9 +1,10 @@
-export interface GatewayPosition {
+export interface Gateway {
   id: string
   name: string
   lat: number
   long: number
   altitude: number,
+  earnings: number,
   locality?: string
 }
 

@@ -11,14 +11,14 @@ import { abi, contractAddresses } from '../common/constants';
 import DeviceCard from '../components/DeviceCard';
 import Navbar from '../components/Navbar';
 import { addressShortener } from '../utils';
-import { GatewayPosition } from '../utils/types';
+import { Gateway } from '../utils/types';
 
 function User() {
 
   const { chainId: chainIdHex, isWeb3EnableLoading, isWeb3Enabled, account } = useMoralis();
   const chainId = parseInt(chainIdHex || '0x0').toString() as keyof typeof contractAddresses;
 
-  const [gateways, setGateways] = useState<GatewayPosition[]>([]);
+  const [gateways, setGateways] = useState<Gateway[]>([]);
   const [balance, setBalance] = useState<string>('0');
   const [loading, setLoading] = useState(true);
 
@@ -55,8 +55,9 @@ function User() {
             lat: parseFloat(g.lat),
             long: parseFloat(g.long),
             altitude: parseInt(g.altitude),
+            earnings: parseInt(g.earnings),
             locality: locations[i]
-          } as GatewayPosition)
+          } as Gateway)
           ));
           setLoading(false);
         });

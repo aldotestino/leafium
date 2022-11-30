@@ -1,4 +1,4 @@
-import { Box, Center, Divider, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerHeader, DrawerOverlay, Spinner, useDisclosure } from '@chakra-ui/react';
+import { Box, Center, Spinner, useDisclosure } from '@chakra-ui/react';
 import { GetServerSideProps } from 'next';
 import { RefObject, useEffect, useRef, useState } from 'react';
 import Map, { MapRef, Marker } from 'react-map-gl';
@@ -8,7 +8,7 @@ import { abi, contractAddresses } from '../common/constants';
 import DeviceSidebar from '../components/DeviceSidebar';
 import MapNavbar from '../components/MapNavbar';
 import { DEFAULT_ZOOM, normalizeMarkerDim } from '../utils';
-import { GatewayPosition } from '../utils/types';
+import { Gateway } from '../utils/types';
 
 interface Position {
   lat: number
@@ -16,7 +16,7 @@ interface Position {
 }
 
 interface DeviceMapProps {
-  gateways: GatewayPosition[]
+  gateways: Gateway[]
 }
 
 function DeviceMap({ gateways }: DeviceMapProps ) {
@@ -96,7 +96,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
 
   const leafiumContract = new web3.eth.Contract(abi as AbiItem[], contractAddress);
 
-  let gateways: GatewayPosition[] = [];
+  let gateways: Gateway[] = [];
 
   await leafiumContract.methods.getGateways().call(function (err: any, res: any) {
     gateways = res?.map((g: any) => ({
@@ -105,7 +105,8 @@ export const getServerSideProps: GetServerSideProps = async () => {
       lat: parseFloat(g.lat),
       long: parseFloat(g.long),
       altitude: parseInt(g.altitude),
-    } as GatewayPosition)
+      earnings: parseInt(g.earnings)
+    } as Gateway)
     );
   });
 

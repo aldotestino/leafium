@@ -20,6 +20,7 @@ def configure_node():
     key_file = open('key.json', 'w')
     key_file.write(o)
     key_file.close()
+    return redirect('/')
 
 
 @app.route("/start_node", methods=["POST"])

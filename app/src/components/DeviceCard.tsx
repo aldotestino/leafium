@@ -1,8 +1,8 @@
 import { Card, CardBody, CardHeader, Divider, HStack, Icon, Text, VStack } from '@chakra-ui/react';
 import { ArrowTrendingUpIcon, CpuChipIcon, CurrencyDollarIcon, GlobeAltIcon, MapPinIcon } from '@heroicons/react/24/outline';
-import { GatewayPosition } from '../utils/types';
+import { Gateway } from '../utils/types';
 
-function DeviceCard({ name, locality, altitude, lat, long }  : GatewayPosition) {
+function DeviceCard({ name, locality, altitude, lat, long, earnings }  : Gateway) {
   return (
     <Card borderRadius="lg" bg="gray.900" color="white" justifySelf="center" w="sm" maxW="md" boxShadow="lg" transition="ease 0.2s" _hover={{ transform: 'scale(1.01)' }}>
       <CardHeader pb={4}>
@@ -28,7 +28,7 @@ function DeviceCard({ name, locality, altitude, lat, long }  : GatewayPosition) 
           </HStack>
           <HStack>
             <Icon as={CurrencyDollarIcon} h="6" w="6" color="purple.400" />
-            <Text fontSize="lg">50 LFM</Text>
+            <Text fontSize="lg">{earnings} LFM</Text>
           </HStack>
         </VStack>
       </CardBody>

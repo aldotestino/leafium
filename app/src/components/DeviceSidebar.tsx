@@ -1,13 +1,13 @@
-import { Box, Divider, Text, Heading, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerHeader, DrawerOverlay, HStack, Input, VStack, Icon, Tag, Spinner } from '@chakra-ui/react';
+import { Box, Divider, Text, Heading, Drawer, DrawerBody, DrawerContent, DrawerHeader, DrawerOverlay, HStack, Input, VStack, Icon, Tag } from '@chakra-ui/react';
 import { ArrowTrendingUpIcon, CpuChipIcon, CurrencyDollarIcon, GlobeAltIcon, MapPinIcon, SignalIcon, SignalSlashIcon } from '@heroicons/react/24/outline';
 import { useEffect } from 'react';
 import { trpc } from '../common/client/trpc';
-import { GatewayPosition } from '../utils/types';
+import { Gateway } from '../utils/types';
 
 interface DeviceSidebarProps {
   onClose: () => void
   isOpen: boolean
-  gateway: GatewayPosition
+  gateway: Gateway
 }
 
 function DeviceSidebar({ onClose, isOpen, gateway }: DeviceSidebarProps) {
@@ -72,7 +72,7 @@ function DeviceSidebar({ onClose, isOpen, gateway }: DeviceSidebarProps) {
               <HStack>
                 <Icon as={CurrencyDollarIcon} h="6" w="6" color="purple.400" />
                 <Text fontSize="xl">
-                  50
+                  {gateway?.earnings}
                   <Text as="span" bgGradient="linear(to-r, purple.500 50%, blue.500)" bgClip="text" display="inline"> LFM</Text>
                 </Text>
               </HStack>

@@ -12,7 +12,7 @@ function Navbar() {
   const [isXl] = useMediaQuery('(min-width: 80em)');
   const { pathname } = useRouter();
   
-  const { account, enableWeb3, isWeb3Enabled } = useMoralis();
+  const { account, isWeb3Enabled } = useMoralis();
 
   return (
     <HStack px={[5, 5, 10, 32]} w="full" py="8" align="center" justify="space-between">

@@ -81,4 +81,13 @@ describe('Leafium unit test', () => {
     await leafium.addGateway('eui-8989898989', 'lucky lizard', '41.16092034214199', '16.4141807908589', 20);
     await expect(leafium.awake('eui-8989898981')).to.be.revertedWith('Gateway not found!');
   });
+
+  it('increase earnings property of the gateway', async () => {
+    await leafium.addGateway('eui-8989898989', 'lucky lizard', '41.16092034214199', '16.4141807908589', 20);
+    await leafium.awake('eui-8989898989');
+    const gateway1 = (await leafium.getGateways())[0];
+    const gateway2 = (await leafium.getMyGateways())[0];
+    //assert(gateway1.earnings.toString() === '51' && gateway2.earnings.toString() === '51');
+    console.log(gateway2);
+  });
 });
