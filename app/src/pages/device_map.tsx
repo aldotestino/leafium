@@ -5,6 +5,7 @@ import Map, { MapRef, Marker } from 'react-map-gl';
 import Web3 from 'web3';
 import { AbiItem } from 'web3-utils';
 import { abi, contractAddresses } from '../common/constants';
+import DeviceSidebar from '../components/DeviceSidebar';
 import MapNavbar from '../components/MapNavbar';
 import { DEFAULT_ZOOM, normalizeMarkerDim } from '../utils';
 import { GatewayPosition } from '../utils/types';
@@ -53,16 +54,8 @@ function DeviceMap({ gateways }: DeviceMapProps ) {
   return (
     <>
       <MapNavbar setMapLocation={setMapLocation} />
-      <Drawer placement="left" onClose={onClose} isOpen={isOpen}>
-        <DrawerOverlay />
-        <DrawerContent>
-          <DrawerCloseButton />
-          <DrawerHeader>{gateways[selectedGatewayIndex]?.name}</DrawerHeader>
-          <Divider />
-          <DrawerBody>           
-          </DrawerBody>
-        </DrawerContent>
-      </Drawer>
+      
+      <DeviceSidebar isOpen={isOpen} onClose={onClose} gateway={gateways[selectedGatewayIndex]}/>
 
       <Map
         ref={mapRef}
