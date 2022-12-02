@@ -53,7 +53,7 @@ function DeviceSidebar({ onClose, isOpen, gateway }: DeviceSidebarProps) {
         </DrawerHeader>
         <Divider />
         <DrawerBody mt={4}>
-          <Box bg="gray.600" p={4} borderRadius="lg">
+          <Box bg="gray.600" p={4} borderRadius="lg" boxShadow="lg">
             <VStack alignItems="left">
               <Heading size="lg">Position</Heading>
               <HStack>
@@ -70,7 +70,7 @@ function DeviceSidebar({ onClose, isOpen, gateway }: DeviceSidebarProps) {
               </HStack>
             </VStack>
           </Box>
-          <Box mt={4} bg="gray.600" p={4} borderRadius="lg">
+          <Box mt={4} bg="gray.600" p={4} borderRadius="lg" boxShadow="lg">
             <VStack alignItems="left">
               <Heading size="lg">Earnings</Heading>
               <HStack>

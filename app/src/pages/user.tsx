@@ -56,6 +56,7 @@ function User() {
             long: parseFloat(g.long),
             altitude: parseInt(g.altitude),
             earnings: parseInt(g.earnings),
+            updatedAt: parseInt(g.updatedAt),
             locality: locations[i]
           } as Gateway)
           ));

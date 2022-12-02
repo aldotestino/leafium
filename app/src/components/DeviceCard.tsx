@@ -1,14 +1,27 @@
 import { Card, CardBody, CardHeader, Divider, HStack, Icon, Text, VStack } from '@chakra-ui/react';
 import { ArrowTrendingUpIcon, CpuChipIcon, CurrencyDollarIcon, GlobeAltIcon, MapPinIcon } from '@heroicons/react/24/outline';
 import { Gateway } from '../utils/types';
+import { isOffline } from '../utils';
+import {SignalIcon, SignalSlashIcon } from '@heroicons/react/24/outline';
 
-function DeviceCard({ name, locality, altitude, lat, long, earnings }  : Gateway) {
+function DeviceCard({ id, name, locality, altitude, lat, long, earnings, updatedAt }  : Gateway) {
+  console.log(updatedAt);
+
   return (
     <Card borderRadius="lg" bg="gray.900" color="white" justifySelf="center" w="sm" maxW="md" boxShadow="lg" transition="ease 0.2s" _hover={{ transform: 'scale(1.01)' }}>
       <CardHeader pb={4}>
-        <HStack fontWeight='bold' fontSize="x-large" >
-          <Icon as={CpuChipIcon} h="10" w="10" />
-          <Text>{name}</Text>
+        <HStack justifyContent="space-between" fontWeight='bold' fontSize="x-large" >
+          <HStack align="center">
+            <Icon as={CpuChipIcon} h="14" w="14" />
+            <VStack spacing={0} align="start">
+              <Text noOfLines={1}>{name}</Text>
+              <Text as='samp' fontSize='xs' fontWeight={1}>{id}</Text>
+            </VStack>
+          </HStack>
+          {isOffline(updatedAt) ? 
+            <Icon as={SignalSlashIcon} h="10" w="10" color="red.400" /> :
+            <Icon as={SignalIcon} h="10" w="10" color="green.400" />  
+          }
         </HStack>
       </CardHeader>
       <Divider />
