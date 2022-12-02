@@ -2,7 +2,7 @@ import { Card, CardBody, CardHeader, Divider, HStack, Icon, Text, VStack } from 
 import { ArrowTrendingUpIcon, CpuChipIcon, CurrencyDollarIcon, GlobeAltIcon, MapPinIcon } from '@heroicons/react/24/outline';
 import { Gateway } from '../utils/types';
 import { isOffline } from '../utils';
-import {SignalIcon, SignalSlashIcon } from '@heroicons/react/24/outline';
+import { SignalIcon, SignalSlashIcon } from '@heroicons/react/24/outline';
 
 function DeviceCard({ id, name, locality, altitude, lat, long, earnings, updatedAt }  : Gateway) {
   console.log(updatedAt);
