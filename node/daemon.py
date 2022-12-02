@@ -3,8 +3,8 @@ from web3 import Web3
 import json
 from utils import set_interval
 
-DEVICE_ID = "eui-9e66120755b3ea34"
-INTERVAL = 60
+DEVICE_ID = "eui-3a0d8533b9824dad"
+INTERVAL = 10
 
 pid = os.getpid()
 pid_file = open(".pid", "w")
@@ -54,4 +54,4 @@ def awake():
 
 
 if __name__ == "__main__":
-    set_interval(awake, INTERVAL = 60)
+    set_interval(awake, INTERVAL)

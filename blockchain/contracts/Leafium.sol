@@ -84,6 +84,7 @@ contract Leafium {
                     ) {
                         gateways[j].earnings = updatedEarnings;
                         gateways[j].updatedAt = updatedAt;
+                        break;
                     }
                 }
                 break;

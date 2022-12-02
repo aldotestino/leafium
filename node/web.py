@@ -25,7 +25,7 @@ def configure_node():
 
 @app.route("/start_node", methods=["POST"])
 def start_node():
-    os.system('python3 daemon.py')
+    os.system('python3 daemon.py&')
     return redirect('/')
 
 
