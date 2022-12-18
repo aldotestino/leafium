@@ -10,7 +10,7 @@ import { trpc } from '../common/client/trpc';
 import { abi, contractAddresses } from '../common/constants';
 import DeviceCard from '../components/DeviceCard';
 import Navbar from '../components/Navbar';
-import { addressShortener } from '../utils';
+import { addressShortener, isOffline } from '../utils';
 import { Gateway } from '../utils/types';
 
 function User() {
@@ -40,6 +40,10 @@ function User() {
 
   const reversePosition = trpc.useMutation(['position.reverse']);
 
+  function removeLocalGateway(gatewayId: string) {
+    setGateways(ps => ps.filter(g => g.id !== gatewayId));
+  }
+
   useEffect(() => {
     setLoading(true);
     if (!isWeb3EnableLoading && !isWeb3Enabled) {
@@ -57,6 +61,7 @@ function User() {
             altitude: parseInt(g.altitude),
             earnings: parseInt(g.earnings),
             updatedAt: parseInt(g.updatedAt),
+            isOffline: isOffline(g.updatedAt),
             locality: locations[i]
           } as Gateway)
           ));
@@ -93,7 +98,7 @@ function User() {
               {gateways.length > 0 ? 
                 <SimpleGrid w="full" gap={4} columns={[1, 1, 1, 2, 3]}>
                   {gateways.map((g, i) =>
-                    <DeviceCard key={i} {...g} />
+                    <DeviceCard key={i} gateway={g} removeLocalGateway={removeLocalGateway} />
                   )}
                 </SimpleGrid> :
                 <Center w="100%">

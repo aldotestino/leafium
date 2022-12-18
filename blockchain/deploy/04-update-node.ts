@@ -7,7 +7,7 @@ const NODE_ADDRESSES_FILE = path.join(__dirname, '..', '..', 'node', 'contractAd
 const NODE_ABI_FILE = path.join(__dirname, '..', '..', 'node', 'abi.json');
 
 const updateFrontend = async () => {
-  if (process.env.UPDATE_NODE) {
+  if (process.env.UPDATE_NODE === 'true') {
     console.log('🚀 Updating node...');
     await updateContractAddresses();
     await updateAbi();

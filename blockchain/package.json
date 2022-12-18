@@ -8,7 +8,9 @@
     "deploy:localhost": "hardhat deploy --network localhost",
     "deploy:goerli": "hardhat deploy --network goerli",
     "run-node": "hardhat node",
-    "test:unit": "hardhat test"
+    "test:unit": "UPDATE_FRONTEND=false UPDATE_NODE=false hardhat test ./test/Leafium.unit.test.ts",
+    "test:stress": "UPDATE_FRONTEND=false UPDATE_NODE=false hardhat test ./test/Leafium.stress.test.ts",
+    "test:coverage": "UPDATE_FRONTEND=false UPDATE_NODE=false hardhat coverage"
   },
   "devDependencies": {
     "@ethersproject/abi": "^5.4.7",

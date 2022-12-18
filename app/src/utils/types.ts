@@ -6,6 +6,7 @@ export interface Gateway {
   altitude: number
   earnings: number
   updatedAt: number
+  isOffline?: boolean
   locality?: string
 }
 

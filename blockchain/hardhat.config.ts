@@ -36,12 +36,12 @@ const config: HardhatUserConfig = {
     }
   },
   gasReporter: {
-    enabled: false
+    enabled: true
   },
   solidity: '0.8.9',
   mocha: {
     timeout: 200000
-  }
+  },
 };
 
 export default config;

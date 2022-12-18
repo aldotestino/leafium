@@ -93,4 +93,35 @@ contract Leafium {
         require(isOfUser, "Gateway not found!");
         token.rewardTo(msg.sender, awakeReward);
     }
+
+    function removeGateway(string memory gatewayId) public {
+        bool isOfUser = false;
+        for (uint256 i = 0; i < userToGateways[msg.sender].length; i++) {
+            if (
+                keccak256(bytes(userToGateways[msg.sender][i].id)) ==
+                keccak256(bytes(gatewayId))
+            ) {
+                isOfUser = true;
+                _burn(userToGateways[msg.sender], i);
+                for (uint256 j = 0; j < gateways.length; j++) {
+                    if (
+                        keccak256(bytes(gateways[j].id)) ==
+                        keccak256(bytes(gatewayId))
+                    ) {
+                        _burn(gateways, j);
+                        break;
+                    }
+                }
+                break;
+            }
+        }
+        require(isOfUser, "Gateway not found!");
+        gatewayExists[gatewayId] = false;
+    }
+
+    function _burn(Gateway[] storage array, uint index) internal {
+        require(index < array.length);
+        array[index] = array[array.length - 1];
+        array.pop();
+    }
 }

@@ -7,7 +7,7 @@ const FRONTEND_ADDRESSES_FILE = path.join(__dirname, '..', '..', 'app', 'src', '
 const FRONTEND_ABI_FILE = path.join(__dirname, '..', '..', 'app', 'src', 'common', 'constants', 'abi.json');
 
 const updateFrontend = async () => {
-  if (process.env.UPDATE_FRONTEND) {
+  if (process.env.UPDATE_FRONTEND === 'true') {
     console.log('🚀 Updating frontend...');
     await updateContractAddresses();
     await updateAbi();

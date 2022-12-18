@@ -4,8 +4,8 @@ import { CheckCircleIcon, CubeTransparentIcon } from '@heroicons/react/24/outlin
 import { Step, Steps } from 'chakra-ui-steps';
 
 const steps = [
-  { label: 'Step 1', description: 'Transfer', icon: CubeTransparentIcon },
-  { label: 'Step 2', description: 'Confirmation', icon: CheckCircleIcon },
+  { label: 'Step 1', description: 'Started', icon: CubeTransparentIcon },
+  { label: 'Step 2', description: 'Confirmed', icon: CheckCircleIcon },
 ];
 
 interface ConfirmationModelProps {

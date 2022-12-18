@@ -19,6 +19,6 @@ export const helperNetworkConfig: HelperNetworkConfig = {
   }
 };
 
-export const INITIAL_SUPPLY = '1000000000000000000000';
+export const INITIAL_SUPPLY = '10000000000000000000000000';
 
 export const developmentChains = ['hardhat', 'localhost'];

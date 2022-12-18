@@ -7,7 +7,7 @@ import { AbiItem } from 'web3-utils';
 import { abi, contractAddresses } from '../common/constants';
 import DeviceSidebar from '../components/DeviceSidebar';
 import MapNavbar from '../components/MapNavbar';
-import { DEFAULT_ZOOM, normalizeMarkerDim } from '../utils';
+import { DEFAULT_ZOOM, isOffline, normalizeMarkerDim } from '../utils';
 import { Gateway } from '../utils/types';
 
 interface Position {
@@ -20,6 +20,8 @@ interface DeviceMapProps {
 }
 
 function DeviceMap({ gateways }: DeviceMapProps ) {
+
+  console.log(gateways);
   
   const [initialPos, setInitialPos] = useState<Position | null>(null);
   const mapRef = useRef<MapRef>() as RefObject<MapRef>;
@@ -104,7 +106,8 @@ export const getServerSideProps: GetServerSideProps = async () => {
       long: parseFloat(g.long),
       altitude: parseInt(g.altitude),
       updatedAt: parseInt(g.updatedAt),
-      earnings: parseInt(g.earnings)
+      earnings: parseInt(g.earnings),
+      isOffline: isOffline(g.updatedAt)
     } as Gateway)
     );
   });

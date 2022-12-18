@@ -28,14 +28,6 @@ const gatewaySchema = z.object({
 
 type GatewaySchema = z.infer<typeof gatewaySchema>;
 
-const initialValues: GatewaySchema = {
-  gatewayId: '',
-  gatewayName: generateRandomName(),
-  lat: '',
-  long: '',
-  altitude: 0
-};
-
 function RegisterDevice() {
 
   const [isLg] = useMediaQuery('(min-width: 62em)');
@@ -58,7 +50,7 @@ function RegisterDevice() {
   });
 
   const { nextStep, activeStep, reset } = useSteps({
-    initialStep: 0,
+    initialStep: 0
   });
 
   const [transactionHash, setTransactionHash] = useState('');
@@ -150,7 +142,13 @@ function RegisterDevice() {
               <Heading color="gray.800">Register your device</Heading>
               <Formik
                 innerRef={formRef as Ref<FormikProps<GatewaySchema>>}
-                initialValues={initialValues}
+                initialValues={{
+                  gatewayId: '',
+                  gatewayName: generateRandomName(),
+                  lat: '',
+                  long: '',
+                  altitude: 0
+                }}
                 validateOnBlur={false}
                 validationSchema={toFormikValidationSchema(gatewaySchema)}
                 onSubmit={onSubmit}
