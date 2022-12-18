@@ -36,7 +36,7 @@ const config: HardhatUserConfig = {
     }
   },
   gasReporter: {
-    enabled: true
+    enabled: false
   },
   solidity: '0.8.9',
   mocha: {

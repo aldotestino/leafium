@@ -30,6 +30,12 @@ jobs:
     - name: Deploy contracts
       run: yarn deploy:hardhat --tags leafium
       working-directory: ./blockchain
-    - name: Run tests
+    - name: Run unit tests
       run: yarn test:unit
+      working-directory: ./blockchain
+    - name: Run stress test
+      run: yarn test:stress
+      working-directory: ./blockchain
+    - name: Run test coverage
+      run: yarn test:coverage
       working-directory: ./blockchain
