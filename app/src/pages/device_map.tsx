@@ -20,8 +20,6 @@ interface DeviceMapProps {
 }
 
 function DeviceMap({ gateways }: DeviceMapProps ) {
-
-  console.log(gateways);
   
   const [initialPos, setInitialPos] = useState<Position | null>(null);
   const mapRef = useRef<MapRef>() as RefObject<MapRef>;
@@ -88,11 +86,13 @@ export default DeviceMap;
 
 export const getServerSideProps: GetServerSideProps = async () => {
 
+  console.log(process.env.NODE_ENV);
+
   const chainId = process.env.NODE_ENV == 'production' ? '5': '31337';
   const contractAddress = contractAddresses[chainId as keyof typeof contractAddresses][0];
 
 
-  const web3 = new Web3('http://localhost:8545');
+  const web3 = new Web3(process.env.NODE_ENV == 'production' ? process.env.GOERLI_RPC_URL! :'http://localhost:8545');
 
   const leafiumContract = new web3.eth.Contract(abi as AbiItem[], contractAddress);
 

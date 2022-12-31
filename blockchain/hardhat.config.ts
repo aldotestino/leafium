@@ -18,11 +18,11 @@ const config: HardhatUserConfig = {
     localhost: {
       chainId: 31337
     },
-    // goerli: {
-    //   url: process.env.GOERLI_RPC_URL,
-    //   accounts: [process.env.PRIVATE_KEY!],
-    //   chainId: 5
-    // }
+    goerli: {
+      url: process.env.GOERLI_RPC_URL,
+      accounts: [process.env.PRIVATE_KEY!],
+      chainId: 5
+    }
   },
   etherscan: {
     apiKey: process.env.ETHERSCAN_API_KEY
