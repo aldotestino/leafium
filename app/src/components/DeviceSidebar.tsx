@@ -17,10 +17,10 @@ function DeviceSidebar({ onClose, isOpen, gateway }: DeviceSidebarProps) {
     if(gateway) {
       reversePosition.mutateAsync({
         coordinates: [
-          { lat: gateway?.lat.toString(), long: gateway?.long.toString() }
+          { gatewayId: gateway.id, lat: gateway?.lat.toString(), long: gateway?.long.toString() }
         ]
       }).then(({ data: { locations } }) => {
-        gateway.locality = locations[0];
+        gateway.locality = locations[gateway.id];
       });
     }
   }, [gateway]);

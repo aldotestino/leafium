@@ -51,7 +51,7 @@ function User() {
     } else {
       getMyGateways().then(r => {
         reversePosition.mutateAsync({
-          coordinates: (r as any[]).map(({ lat, long }) => ({ lat: lat.toString(), long: long.toString() }))
+          coordinates: (r as any[]).map(({ lat, long, id }) => ({ gatewayId: id, lat: lat.toString(), long: long.toString() }))
         }).then(({ data: { locations } }) => {
           setGateways((r as any[]).map((g: any, i) => ({
             id: g.id,
@@ -62,7 +62,7 @@ function User() {
             earnings: parseInt(g.earnings),
             updatedAt: parseInt(g.updatedAt),
             isOffline: isOffline(g.updatedAt),
-            locality: locations[i]
+            locality: locations[g.id]
           } as Gateway)
           ));
           setLoading(false);
